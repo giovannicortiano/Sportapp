@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    android:padding="30dp"
+    tools:context="com.giovanni.sportapp.sportapp.LoginActivity">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="250dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="21dp"
+        app:srcCompat="@drawable/logoprimary" />
+
+    <EditText
+        android:id="@+id/edtEmailId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/imageView"
+        android:layout_alignLeft="@+id/imageView"
+        android:layout_alignRight="@+id/imageView"
+        android:layout_alignStart="@+id/imageView"
+        android:layout_below="@+id/imageView"
+        android:backgroundTint="@color/colorLighter"
+        android:ems="10"
+        android:hint="@string/HintEmail"
+        android:inputType="textPersonName"
+        android:textColor="@color/colorTextWhite"
+        android:textColorHighlight="@color/colorAccent"
+        android:textColorHint="@color/colorTextWhite" />
+
+    <EditText
+        android:id="@+id/editText2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/edtEmailId"
+        android:layout_alignLeft="@+id/edtEmailId"
+        android:layout_alignRight="@+id/edtEmailId"
+        android:layout_alignStart="@+id/edtEmailId"
+        android:layout_below="@+id/edtEmailId"
+        android:layout_marginTop="12dp"
+        android:backgroundTint="@color/colorLighter"
+        android:ems="10"
+        android:hint="@string/HintSenha"
+        android:inputType="textPassword"
+        android:textColor="@color/colorTextWhite"
+        android:textColorHint="@color/colorTextWhite" />
+
+    <Switch
+        android:id="@+id/switch1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/editText2"
+        android:layout_alignRight="@+id/editText2"
+        android:layout_below="@+id/editText2"
+        android:text="@string/LembrarSenha"
+        android:textColor="@color/colorTextWhite" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="35dp"
+        android:layout_alignEnd="@+id/switch1"
+        android:layout_alignLeft="@+id/editText2"
+        android:layout_alignRight="@+id/switch1"
+        android:layout_alignStart="@+id/editText2"
+        android:layout_below="@+id/switch1"
+        android:layout_marginTop="11dp"
+        android:background="@color/colorPrimaryDark"
+        android:text="@string/BtnEntrar"
+        android:textColor="@color/colorTextWhite" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/button2"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="14dp"
+        android:text="@string/TextoCadastrese"
+        android:textColor="@color/colorTextWhite" />
+</RelativeLayout>

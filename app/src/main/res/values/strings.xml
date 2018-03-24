@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Sportapp</string>
+    <string name="HintEmail">Digite seu e-mail.</string>
+    <string name="HintSenha">Digite sua senha.</string>
+    <string name="BtnEntrar">Entrar</string>
+    <string name="TextoCadastrese">Cadastre-se</string>
+    <string name="GravarDados">Gravar Senha</string>
+    <string name="LembrarSenha">Lembrar Senha</string>
+</resources>
