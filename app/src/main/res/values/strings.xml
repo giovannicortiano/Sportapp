@@ -1,9 +1,13 @@
 <resources>
     <string name="app_name">Sportapp</string>
-    <string name="HintEmail">Digite seu e-mail.</string>
-    <string name="HintSenha">Digite sua senha.</string>
+    <string name="HintEmail">E-mail</string>
+    <string name="HintSenha">Senha</string>
     <string name="BtnEntrar">Entrar</string>
     <string name="TextoCadastrese">Cadastre-se</string>
-    <string name="GravarDados">Gravar Senha</string>
-    <string name="LembrarSenha">Lembrar Senha</string>
+    <string name="Cadastrar">Cadastrar</string>
+    <string name="DigiteNome">Seu Nome</string>
+    <string name="EmailESenhaNaoPreenchidosAoLogar">É necessário informar e-mail e senha para fazer o LOGIN.</string>
+    <string name="EsqueciSenha">Esqueceu sua senha?</string>
+    <string name="RecuperarSenha">Recuperar</string>
+    <string name="TextoCabecalhoRecuperarSenha">Use esta opção exclusivamente se você não lembra da sua senha. Digite o seu e-mail de cadastro e então a sua senha será enviada para este e-mail.</string>
 </resources>

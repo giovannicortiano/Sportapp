@@ -1,87 +1,98 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
-    android:padding="30dp"
-    tools:context="com.giovanni.sportapp.sportapp.LoginActivity">
-
-    <ImageView
-        android:id="@+id/imagemLogoId"
-        android:layout_width="wrap_content"
-        android:layout_height="250dp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="21dp"
-        app:srcCompat="@drawable/logoprimary" />
+    tools:context="com.giovanni.sportapp.sportapp.Activitys.LoginActivity">
 
     <EditText
-        android:id="@+id/edtEmailId"
-        android:layout_width="wrap_content"
+        android:id="@+id/edtEmailLoginId"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/imagemLogoId"
-        android:layout_alignLeft="@+id/imagemLogoId"
-        android:layout_alignRight="@+id/imagemLogoId"
-        android:layout_alignStart="@+id/imagemLogoId"
-        android:layout_below="@+id/imagemLogoId"
-        android:backgroundTint="@color/colorLighter"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:drawableLeft="@drawable/ic_email_cinza_24dp"
+        android:drawablePadding="8dp"
         android:ems="10"
         android:hint="@string/HintEmail"
-        android:inputType="textPersonName"
-        android:textColor="@color/colorTextWhite"
-        android:textColorHighlight="@color/colorAccent"
-        android:textColorHint="@color/colorTextWhite" />
+        android:inputType="textEmailAddress"
+        app:layout_constraintBottom_toTopOf="@+id/edtSenhaLoginId"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed" />
 
     <EditText
-        android:id="@+id/edtSenhaId"
-        android:layout_width="wrap_content"
+        android:id="@+id/edtSenhaLoginId"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/edtEmailId"
-        android:layout_alignLeft="@+id/edtEmailId"
-        android:layout_alignRight="@+id/edtEmailId"
-        android:layout_alignStart="@+id/edtEmailId"
-        android:layout_below="@+id/edtEmailId"
-        android:layout_marginTop="12dp"
-        android:backgroundTint="@color/colorLighter"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:drawableLeft="@drawable/ic_cadeado_cinza_24dp"
+        android:drawablePadding="8dp"
         android:ems="10"
         android:hint="@string/HintSenha"
         android:inputType="textPassword"
-        android:textColor="@color/colorTextWhite"
-        android:textColorHint="@color/colorTextWhite" />
-
-    <Switch
-        android:id="@+id/switchLembrarSenhaId"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/edtSenhaId"
-        android:layout_alignRight="@+id/edtSenhaId"
-        android:layout_below="@+id/edtSenhaId"
-        android:text="@string/LembrarSenha"
-        android:textColor="@color/colorTextWhite" />
+        app:layout_constraintBottom_toTopOf="@+id/btnEntrarId"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edtEmailLoginId" />
 
     <Button
-        android:id="@+id/botaoEntrarId"
-        android:layout_width="wrap_content"
-        android:layout_height="35dp"
-        android:layout_alignEnd="@+id/switchLembrarSenhaId"
-        android:layout_alignLeft="@+id/edtSenhaId"
-        android:layout_alignRight="@+id/switchLembrarSenhaId"
-        android:layout_alignStart="@+id/edtSenhaId"
-        android:layout_below="@+id/switchLembrarSenhaId"
-        android:layout_marginTop="11dp"
-        android:background="@color/colorPrimaryDark"
+        android:id="@+id/btnEntrarId"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/colorPrimary"
         android:text="@string/BtnEntrar"
-        android:textColor="@color/colorTextWhite" />
+        android:textColor="@color/colorTextWhite"
+        app:layout_constraintBottom_toTopOf="@+id/TextViewCadastreSeId"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edtSenhaLoginId" />
 
     <TextView
-        android:id="@+id/textViewCadastreseId"
+        android:id="@+id/TextViewCadastreSeId"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/botaoEntrarId"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="14dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:drawableLeft="@drawable/ic_person_add_cinza_16dp"
+        android:drawablePadding="4dp"
         android:text="@string/TextoCadastrese"
-        android:textColor="@color/colorTextWhite" />
-</RelativeLayout>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnEntrarId"
+        app:layout_constraintVertical_bias="0.022" />
+
+    <TextView
+        android:id="@+id/TextViewEsqueceuSenhaId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:drawableLeft="@drawable/ic_lock_cinza_16dp"
+        android:drawablePadding="4dp"
+        android:text="@string/EsqueciSenha"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnEntrarId"
+        app:layout_constraintVertical_bias="0.0" />
+
+</android.support.constraint.ConstraintLayout>
