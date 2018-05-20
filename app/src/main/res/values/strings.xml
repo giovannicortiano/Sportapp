@@ -5,9 +5,22 @@
     <string name="BtnEntrar">Entrar</string>
     <string name="TextoCadastrese">Cadastre-se</string>
     <string name="Cadastrar">Cadastrar</string>
-    <string name="DigiteNome">Seu Nome</string>
+    <string name="DigiteNome">Nome</string>
     <string name="EmailESenhaNaoPreenchidosAoLogar">É necessário informar e-mail e senha para fazer o LOGIN.</string>
     <string name="EsqueciSenha">Esqueceu sua senha?</string>
     <string name="RecuperarSenha">Recuperar</string>
-    <string name="TextoCabecalhoRecuperarSenha">Use esta opção exclusivamente se você não lembra da sua senha. Digite o seu e-mail de cadastro e então a sua senha será enviada para este e-mail.</string>
+    <string name="TextoCabecalhoRecuperarSenha">Use esta opção exclusivamente se você não lembra da sua senha. Digite o seu e-mail de cadastro e então um LINK para redefinição de senha será enviado para este e-mail.</string>
+    <string name="CampoNomeObrigatorio">Preencha o campo ""Nome"".</string>
+    <string name="CampoSenhaObrigatorio">Preencha o campo ""Senha"".</string>
+    <string name="CampoEmailObrigatorio">Preencha o campo ""E-mail"".</string>
+    <string name="UsuarioCadastradoComSucesso">Sucesso ao cadastrar usuário. Verifique seu e-mail para confirmar sua conta.</string>
+    <string name="DigiteSenhaMaisForte">Atenção! Utilize uma senha mais forte.</string>
+    <string name="EmailInvalido">Atenção! O e-mail inválido.</string>
+    <string name="EmailJaCadastrado">Atenção! O e-mail já possuí cadastro no Sportapp.</string>
+    <string name="ErroDesconhecido">Ocorreu um erro desconhecido. Verifique sua conexão com a internet.</string>
+    <string name="UsuarioOuSenhaInva">E-mail ou senha inválidos.</string>
+    <string name="UsuarioNaoCadastrado">E-mail não cadastrado no Sportapp.</string>
+    <string name="ConfirmarEmail">Entre na sua caixa de e-mail e confirme sua conta. Caso não tenha recebido o e-mail de confirmação, toque aqui para reenviar.</string>
+    <string name="EmailReenviado">E-mail reenviado.</string>
+    <string name="EmailNaoCastrado">E-mail não cadastrado no Sportapp.</string>
 </resources>

@@ -7,7 +7,7 @@
     tools:context="com.giovanni.sportapp.sportapp.Activitys.CadastroUsuarioActivity">
 
     <EditText
-        android:id="@+id/edtNomeCadastroId"
+        android:id="@+id/edtNomeCadastro"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -18,7 +18,7 @@
         android:ems="10"
         android:hint="@string/DigiteNome"
         android:inputType="textPersonName"
-        app:layout_constraintBottom_toTopOf="@+id/edtEmailCadastroId"
+        app:layout_constraintBottom_toTopOf="@+id/edtEmailCadastro"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -26,7 +26,7 @@
         app:layout_constraintVertical_chainStyle="packed" />
 
     <EditText
-        android:id="@+id/edtEmailCadastroId"
+        android:id="@+id/edtEmailCadastro"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -37,14 +37,14 @@
         android:ems="10"
         android:hint="@string/HintEmail"
         android:inputType="textEmailAddress"
-        app:layout_constraintBottom_toTopOf="@+id/edtSenhaCadastroId"
+        app:layout_constraintBottom_toTopOf="@+id/edtSenhaCadastro"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edtNomeCadastroId" />
+        app:layout_constraintTop_toBottomOf="@+id/edtNomeCadastro" />
 
     <EditText
-        android:id="@+id/edtSenhaCadastroId"
+        android:id="@+id/edtSenhaCadastro"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -55,14 +55,14 @@
         android:ems="10"
         android:hint="@string/HintSenha"
         android:inputType="textPassword"
-        app:layout_constraintBottom_toTopOf="@+id/btnCadastrarId"
+        app:layout_constraintBottom_toTopOf="@+id/btnCadastrar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edtEmailCadastroId" />
+        app:layout_constraintTop_toBottomOf="@+id/edtEmailCadastro" />
 
     <Button
-        android:id="@+id/btnCadastrarId"
+        android:id="@+id/btnCadastrar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -76,5 +76,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edtSenhaCadastroId" />
+        app:layout_constraintTop_toBottomOf="@+id/edtSenhaCadastro" />
 </android.support.constraint.ConstraintLayout>

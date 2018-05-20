@@ -17,7 +17,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".Activitys.CadastroUsuarioActivity" />
-        <activity android:name=".Activitys.RecuperarSenhaActivity"></activity>
+        <activity android:name=".Activitys.RecuperarSenhaActivity" />
+        <activity android:name=".Activitys.MainActivity"></activity>
     </application>
 
 </manifest>

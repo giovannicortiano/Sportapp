@@ -7,7 +7,7 @@
     tools:context="com.giovanni.sportapp.sportapp.Activitys.RecuperarSenhaActivity">
 
     <EditText
-        android:id="@+id/edtEmailRecuperarSenhaId"
+        android:id="@+id/edtEmailRecuperarSenha"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -19,7 +19,7 @@
         android:gravity="left|right|start"
         android:hint="@string/HintEmail"
         android:inputType="textEmailAddress"
-        app:layout_constraintBottom_toTopOf="@+id/btnRecuperarSenhaId"
+        app:layout_constraintBottom_toTopOf="@+id/btnRecuperarSenha"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -27,7 +27,7 @@
         app:layout_constraintVertical_chainStyle="packed" android:drawableStart="@drawable/ic_email_cinza_24dp"/>
 
     <Button
-        android:id="@+id/btnRecuperarSenhaId"
+        android:id="@+id/btnRecuperarSenha"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -40,7 +40,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edtEmailRecuperarSenhaId" />
+        app:layout_constraintTop_toBottomOf="@+id/edtEmailRecuperarSenha" />
 
     <TextView
         android:id="@+id/textViewExplicacaoRecuperarSenha"
@@ -57,6 +57,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnRecuperarSenhaId"
+        app:layout_constraintTop_toBottomOf="@+id/btnRecuperarSenha"
         app:layout_constraintVertical_bias="0.494" />
 </android.support.constraint.ConstraintLayout>

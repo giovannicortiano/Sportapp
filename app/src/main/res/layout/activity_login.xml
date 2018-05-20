@@ -7,7 +7,7 @@
     tools:context="com.giovanni.sportapp.sportapp.Activitys.LoginActivity">
 
     <EditText
-        android:id="@+id/edtEmailLoginId"
+        android:id="@+id/edtEmailLogin"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -18,7 +18,7 @@
         android:ems="10"
         android:hint="@string/HintEmail"
         android:inputType="textEmailAddress"
-        app:layout_constraintBottom_toTopOf="@+id/edtSenhaLoginId"
+        app:layout_constraintBottom_toTopOf="@+id/edtSenhaLogin"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -26,7 +26,7 @@
         app:layout_constraintVertical_chainStyle="packed" />
 
     <EditText
-        android:id="@+id/edtSenhaLoginId"
+        android:id="@+id/edtSenhaLogin"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -37,14 +37,14 @@
         android:ems="10"
         android:hint="@string/HintSenha"
         android:inputType="textPassword"
-        app:layout_constraintBottom_toTopOf="@+id/btnEntrarId"
+        app:layout_constraintBottom_toTopOf="@+id/btnEntrar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edtEmailLoginId" />
+        app:layout_constraintTop_toBottomOf="@+id/edtEmailLogin" />
 
     <Button
-        android:id="@+id/btnEntrarId"
+        android:id="@+id/btnEntrar"
         android:layout_width="0dp"
         android:layout_height="48dp"
         android:layout_marginEnd="8dp"
@@ -53,14 +53,14 @@
         android:background="@color/colorPrimary"
         android:text="@string/BtnEntrar"
         android:textColor="@color/colorTextWhite"
-        app:layout_constraintBottom_toTopOf="@+id/TextViewCadastreSeId"
+        app:layout_constraintBottom_toTopOf="@+id/TextViewCadastreSe"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edtSenhaLoginId" />
+        app:layout_constraintTop_toBottomOf="@+id/edtSenhaLogin" />
 
     <TextView
-        android:id="@+id/TextViewCadastreSeId"
+        android:id="@+id/TextViewCadastreSe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -74,11 +74,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnEntrarId"
+        app:layout_constraintTop_toBottomOf="@+id/btnEntrar"
         app:layout_constraintVertical_bias="0.022" />
 
     <TextView
-        android:id="@+id/TextViewEsqueceuSenhaId"
+        android:id="@+id/TextViewEsqueceuSenha"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -92,7 +92,29 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnEntrarId"
+        app:layout_constraintTop_toBottomOf="@+id/btnEntrar"
         app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/TextViewConfirmarEmail"
+        android:layout_width="0dp"
+        android:layout_height="52dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:drawableLeft="@drawable/ic_warning_red_24dp"
+        android:drawablePadding="0dp"
+        android:text="@string/ConfirmarEmail"
+        android:textAlignment="center"
+        android:textColor="@android:color/holo_red_dark"
+        android:textStyle="bold"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/TextViewCadastreSe"
+        app:layout_constraintVertical_bias="0.043" />
 
 </android.support.constraint.ConstraintLayout>
