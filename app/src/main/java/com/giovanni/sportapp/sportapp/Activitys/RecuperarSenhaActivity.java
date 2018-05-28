@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.giovanni.sportapp.sportapp.Configuracoes.ConfiguradorFireBase;
@@ -14,10 +15,12 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthEmailException;
+import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 
 public class RecuperarSenhaActivity extends AppCompatActivity {
     private EditText edtEmailRecuperarSenha;
     private Button btnRecuperarSenha;
+    private ProgressBar ProgressBarEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +40,7 @@ public class RecuperarSenhaActivity extends AppCompatActivity {
     private void RecuperarViews(){
         edtEmailRecuperarSenha = findViewById(R.id.edtEmailRecuperarSenha);
         btnRecuperarSenha = findViewById(R.id.btnRecuperarSenha);
+        ProgressBarEmail = findViewById(R.id.progressEmail);
     }
 
     private boolean ValidarPreechimentoDosCampos(){
@@ -49,25 +53,27 @@ public class RecuperarSenhaActivity extends AppCompatActivity {
 
     private void EnviarEmailRecuperacaoSenha(){
         FirebaseAuth AutenticadorFireBase = ConfiguradorFireBase.getAutenticadorFireBase();
-
+        ProgressBarEmail.setVisibility(View.VISIBLE);
         AutenticadorFireBase.sendPasswordResetEmail(edtEmailRecuperarSenha.getText().toString()).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()){
-                    Toast.makeText(getApplicationContext(),"E-mail enviado para: " + edtEmailRecuperarSenha.getText().toString(),Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(),R.string.EmailEnviadoPara + edtEmailRecuperarSenha.getText().toString(),Toast.LENGTH_SHORT).show();
+                    ProgressBarEmail.setVisibility(View.INVISIBLE);
                     finish();
                 }
                 else {
                     try{
                         throw task.getException();
                     }
-                    catch (FirebaseAuthEmailException e){
+                    catch (FirebaseAuthInvalidUserException e){
                         Toast.makeText(RecuperarSenhaActivity.this, R.string.EmailNaoCastrado,Toast.LENGTH_SHORT).show();
                     }
                     catch (Exception e){
-                        Toast.makeText(getApplicationContext(),e.getMessage(),Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(),R.string.ErroDesconhecido + ". " + e.getMessage(),Toast.LENGTH_SHORT).show();
                         e.printStackTrace();
                     }
+                    ProgressBarEmail.setVisibility(View.INVISIBLE);
                 }
             }
         });

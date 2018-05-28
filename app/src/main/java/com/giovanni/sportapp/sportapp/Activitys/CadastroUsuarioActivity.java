@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 import com.giovanni.sportapp.sportapp.Configuracoes.ConfiguradorFireBase;
 import com.giovanni.sportapp.sportapp.Model.Usuario;
@@ -16,6 +17,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthEmailException;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
@@ -27,6 +29,7 @@ public class CadastroUsuarioActivity extends AppCompatActivity {
     private EditText edtEmailCadastroUsuario;
     private Button btnCadastrarUsuario;
     private FirebaseAuth AutenticadorFireBase;
+    private ProgressBar ProgressBarCadastro;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +53,7 @@ public class CadastroUsuarioActivity extends AppCompatActivity {
         edtSenhaCadastroUsuario = findViewById(R.id.edtSenhaCadastro);
         edtEmailCadastroUsuario = findViewById(R.id.edtEmailCadastro);
         btnCadastrarUsuario = findViewById(R.id.btnCadastrar);
+        ProgressBarCadastro = findViewById(R.id.progressCadastro);
     }
 
     public boolean ValidarPreenchimentoDosCampos(){
@@ -77,19 +81,21 @@ public class CadastroUsuarioActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
                             Toast.makeText(CadastroUsuarioActivity.this,R.string.UsuarioCadastradoComSucesso,Toast.LENGTH_LONG).show();
+                            ProgressBarCadastro.setVisibility(View.INVISIBLE);
                             finish();
                         }
                         else{
                             try{
                                 throw task.getException();
                             }
-                            catch (FirebaseAuthEmailException e){
-                                Toast.makeText(CadastroUsuarioActivity.this, e.getMessage(),Toast.LENGTH_SHORT).show();
+                            catch (FirebaseAuthInvalidUserException e){
+                                Toast.makeText(CadastroUsuarioActivity.this,R.string.UsuarioNaoCadastrado,Toast.LENGTH_SHORT).show();
                             }
                             catch (Exception e){
                                 Toast.makeText(CadastroUsuarioActivity.this,R.string.ErroDesconhecido + " " + e.getMessage(),Toast.LENGTH_SHORT).show();
                                 e.printStackTrace();
                             }
+                            ProgressBarCadastro.setVisibility(View.INVISIBLE);
                         }
                     }
                 });
@@ -101,6 +107,7 @@ public class CadastroUsuarioActivity extends AppCompatActivity {
         NovoUsuario.setSenha(edtSenhaCadastroUsuario.getText().toString());
         NovoUsuario.setEmail(edtEmailCadastroUsuario.getText().toString());
 
+        ProgressBarCadastro.setVisibility(View.VISIBLE);
         AutenticadorFireBase = ConfiguradorFireBase.getAutenticadorFireBase();
         AutenticadorFireBase.createUserWithEmailAndPassword(NovoUsuario.getEmail(),NovoUsuario.getSenha()).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
@@ -113,10 +120,10 @@ public class CadastroUsuarioActivity extends AppCompatActivity {
                         throw task.getException();
                     }
                     catch (FirebaseAuthWeakPasswordException e){
-                        Toast.makeText(getApplicationContext(),R.string.DigiteSenhaMaisForte ,Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), R.string.DigiteSenhaMaisForte ,Toast.LENGTH_SHORT).show();
                     }
                     catch (FirebaseAuthInvalidCredentialsException e){
-                        Toast.makeText(getApplicationContext(),R.string.EmailInvalido ,Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(),R.string.EmailInvalido,Toast.LENGTH_SHORT).show();
                     }
                     catch (FirebaseAuthUserCollisionException e){
                         Toast.makeText(getApplicationContext(),R.string.EmailJaCadastrado ,Toast.LENGTH_SHORT).show();
@@ -125,6 +132,7 @@ public class CadastroUsuarioActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(),R.string.ErroDesconhecido + e.getMessage() ,Toast.LENGTH_SHORT).show();
                         e.printStackTrace();
                     }
+                    ProgressBarCadastro.setVisibility(View.INVISIBLE);
                 }
             }
         });

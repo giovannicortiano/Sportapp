@@ -23,4 +23,5 @@
     <string name="ConfirmarEmail">Entre na sua caixa de e-mail e confirme sua conta. Caso não tenha recebido o e-mail de confirmação, toque aqui para reenviar.</string>
     <string name="EmailReenviado">E-mail reenviado.</string>
     <string name="EmailNaoCastrado">E-mail não cadastrado no Sportapp.</string>
+    <string name="EmailEnviadoPara">E-mail enviado para: </string>
 </resources>

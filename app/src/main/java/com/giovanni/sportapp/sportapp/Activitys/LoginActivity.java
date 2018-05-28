@@ -2,11 +2,15 @@ package com.giovanni.sportapp.sportapp.Activitys;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v4.widget.CircularProgressDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,6 +34,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText EdtSenhaLogin;
     private TextView TextViewConfirmarEmail;
     private FirebaseAuth AutenticadorFireBase;
+    private ProgressBar ProgressBarLogin;
 
 
 
@@ -58,6 +63,26 @@ public class LoginActivity extends AppCompatActivity {
         EdtEmailLogin = findViewById(R.id.edtEmailLogin);
         EdtSenhaLogin = findViewById(R.id.edtSenhaLogin);
         TextViewConfirmarEmail = findViewById(R.id.TextViewConfirmarEmail);
+        ProgressBarLogin = findViewById(R.id.progressLogin);
+        EdtEmailLogin.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (EdtEmailLogin.getText().toString().isEmpty()) {
+                    TextViewConfirmarEmail.setVisibility(View.INVISIBLE);
+                    ConfiguradorFireBase.getAutenticadorFireBase().signOut();
+                }
+            }
+        });
     }
 
     private void VincularTextViewEmailNaoConfirmadoOnClick(){
@@ -68,7 +93,7 @@ public class LoginActivity extends AppCompatActivity {
                 if (UsuarioAtual == null){
                     return;
                 }
-
+                ProgressBarLogin.setVisibility(View.VISIBLE);
                 UsuarioAtual.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
@@ -79,14 +104,15 @@ public class LoginActivity extends AppCompatActivity {
                             try{
                                 throw task.getException();
                                         }
-                            catch (FirebaseAuthEmailException e){
-                                Toast.makeText(LoginActivity.this, e.getMessage(),Toast.LENGTH_SHORT).show();
+                            catch (FirebaseAuthInvalidUserException e){
+                                Toast.makeText(LoginActivity.this, R.string.UsuarioNaoCadastrado,Toast.LENGTH_SHORT).show();
                             }
                             catch (Exception e){
                                 Toast.makeText(LoginActivity.this,R.string.ErroDesconhecido + " " + e.getMessage(),Toast.LENGTH_SHORT).show();
                                 e.printStackTrace();
                             }
                         }
+                        ProgressBarLogin.setVisibility(View.INVISIBLE);
                     }
                 });
             }
@@ -114,38 +140,28 @@ public class LoginActivity extends AppCompatActivity {
 
     private void AutenticarUsuario(){
         AutenticadorFireBase = ConfiguradorFireBase.getAutenticadorFireBase();
-
-        AutenticadorFireBase.signInWithEmailAndPassword(EdtEmailLogin.getText().toString(),EdtSenhaLogin.getText().toString())
-                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()){
-                            FirebaseUser UsuarioAtual = ConfiguradorFireBase.getAutenticadorFireBase().getCurrentUser();
-                            if (UsuarioAtual.isEmailVerified()) {
-                                TextViewConfirmarEmail.setVisibility(View.INVISIBLE);
-                                startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                            }
-                            else{
-                                TextViewConfirmarEmail.setVisibility(View.VISIBLE);
-                            }
-                        }
-                        else{
-                            try {
-                                throw task.getException();
-                            }
-                            catch (FirebaseAuthInvalidUserException e){
-                                Toast.makeText(getApplicationContext(),R.string.UsuarioNaoCadastrado ,Toast.LENGTH_SHORT).show();
-                            }
-                            catch (FirebaseAuthInvalidCredentialsException e){
-                                Toast.makeText(getApplicationContext(),R.string.UsuarioOuSenhaInva ,Toast.LENGTH_SHORT).show();
-                            }
-                            catch (Exception e){
-                                Toast.makeText(getApplicationContext(),R.string.ErroDesconhecido + ". " + e.getMessage(),Toast.LENGTH_SHORT).show();
-                                e.printStackTrace();
+        ProgressBarLogin.setVisibility(View.VISIBLE);
+        AutenticadorFireBase.signInWithEmailAndPassword(EdtEmailLogin.getText().toString(), EdtSenhaLogin.getText().toString())
+                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                VerificarUsuarioLogado();
+                            } else {
+                                try {
+                                    throw task.getException();
+                                } catch (FirebaseAuthInvalidUserException e) {
+                                    Toast.makeText(getApplicationContext(), R.string.UsuarioNaoCadastrado, Toast.LENGTH_SHORT).show();
+                                } catch (FirebaseAuthInvalidCredentialsException e) {
+                                    Toast.makeText(getApplicationContext(), R.string.UsuarioOuSenhaInva, Toast.LENGTH_SHORT).show();
+                                } catch (Exception e) {
+                                    Toast.makeText(getApplicationContext(), R.string.ErroDesconhecido + ". " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                    e.printStackTrace();
+                                }
+                                ProgressBarLogin.setVisibility(View.INVISIBLE);
                             }
                         }
-                    }
-                });
+                    });
     }
 
     private void VincularBtnEntrarOnClick(){
@@ -182,10 +198,12 @@ public class LoginActivity extends AppCompatActivity {
             if (UsuarioAtual.isEmailVerified()) {
                 TextViewConfirmarEmail.setVisibility(View.INVISIBLE);
                 startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                ProgressBarLogin.setVisibility(View.INVISIBLE);
             }
             else{
                 TextViewConfirmarEmail.setVisibility(View.VISIBLE);
                 EdtEmailLogin.setText(UsuarioAtual.getEmail());
+                ProgressBarLogin.setVisibility(View.INVISIBLE);
             }
         }
     }
