@@ -24,4 +24,7 @@
     <string name="EmailReenviado">E-mail reenviado.</string>
     <string name="EmailNaoCastrado">E-mail não cadastrado no Sportapp.</string>
     <string name="EmailEnviadoPara">E-mail enviado para: </string>
+    <string name="Pesquisar">Pesquisar</string>
+    <string name="Configuracoes">Configurações</string>
+    <string name="Sair">Sair</string>
 </resources>
