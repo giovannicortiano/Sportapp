@@ -3,6 +3,7 @@ package com.giovanni.sportapp.sportapp.Activitys;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -102,7 +103,7 @@ public class CadastroUsuarioActivity extends AppCompatActivity {
     }
 
     private void CadastrarUsuario(){
-        Usuario NovoUsuario = new Usuario();
+        final Usuario NovoUsuario = new Usuario();
         NovoUsuario.setNome(edtNomeCadastroUsuario.getText().toString());
         NovoUsuario.setSenha(edtSenhaCadastroUsuario.getText().toString());
         NovoUsuario.setEmail(edtEmailCadastroUsuario.getText().toString());
@@ -113,6 +114,8 @@ public class CadastroUsuarioActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()){
+                    NovoUsuario.setId(Base64.encodeToString(NovoUsuario.getEmail().getBytes(),Base64.DEFAULT).replaceAll("(\\n|\\r)",""));
+                    NovoUsuario.GravarNoBancoDeDados();
                     EnviarEmailConfirmacao();
                 }
                 else{

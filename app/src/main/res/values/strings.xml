@@ -27,4 +27,13 @@
     <string name="Pesquisar">Pesquisar</string>
     <string name="Configuracoes">Configurações</string>
     <string name="Sair">Sair</string>
+    <string name="Conversas">Conversas</string>
+    <string name="Anuncios">Anuncios</string>
+    <string name="Pessoas">Pessoas</string>
+    <string name="SobreVoce">Sobre Você</string>
+    <string name="SeusEsportes">Seus esportes, ex: #tenis #futebol, #basquete, #natação</string>
+    <string name="Atualizar">Atualizar</string>
+    <string name="ApagarConta">APAGAR CONTA</string>
+
+
 </resources>
