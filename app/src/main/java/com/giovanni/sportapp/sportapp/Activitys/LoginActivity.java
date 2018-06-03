@@ -191,6 +191,8 @@ public class LoginActivity extends AppCompatActivity {
 
         UsuarioAtual = AutenticadorFireBase.getCurrentUser();
 
+
+
         if (UsuarioAtual != null){
             if (UsuarioAtual.isEmailVerified()) {
                 TextViewConfirmarEmail.setVisibility(View.INVISIBLE);

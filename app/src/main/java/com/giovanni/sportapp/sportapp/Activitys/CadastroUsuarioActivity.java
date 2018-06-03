@@ -31,6 +31,7 @@ public class CadastroUsuarioActivity extends AppCompatActivity {
     private Button btnCadastrarUsuario;
     private FirebaseAuth AutenticadorFireBase;
     private ProgressBar ProgressBarCadastro;
+    private Usuario NovoUsuario;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,7 +104,7 @@ public class CadastroUsuarioActivity extends AppCompatActivity {
     }
 
     private void CadastrarUsuario(){
-        final Usuario NovoUsuario = new Usuario();
+        NovoUsuario = new Usuario();
         NovoUsuario.setNome(edtNomeCadastroUsuario.getText().toString());
         NovoUsuario.setSenha(edtSenhaCadastroUsuario.getText().toString());
         NovoUsuario.setEmail(edtEmailCadastroUsuario.getText().toString());
@@ -114,7 +115,8 @@ public class CadastroUsuarioActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()){
-                    NovoUsuario.setId(Base64.encodeToString(NovoUsuario.getEmail().getBytes(),Base64.DEFAULT).replaceAll("(\\n|\\r)",""));
+                    FirebaseUser UsuarioAtual = FirebaseAuth.getInstance().getCurrentUser();
+                    NovoUsuario.setId(UsuarioAtual.getUid());
                     NovoUsuario.GravarNoBancoDeDados();
                     EnviarEmailConfirmacao();
                 }

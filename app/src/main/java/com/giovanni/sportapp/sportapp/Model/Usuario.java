@@ -11,6 +11,7 @@ public class Usuario {
     private String Senha;
     private String Sobre;
     private String Esportes;
+    private String FotoUrl;
 
     public Usuario() {
     }
@@ -20,7 +21,6 @@ public class Usuario {
         referenciaFireBase.child("Usuarios").child(getId()).setValue(this);
     }
 
-    @Exclude
     public String getId() {
         return Id;
     }
@@ -70,4 +70,14 @@ public class Usuario {
     public String getSenha() {
         return Senha;
     }
+
+
+    public String getFotoUrl() {
+        return FotoUrl;
+    }
+
+    public void setFotoUrl(String fotoUrl) {
+        FotoUrl = fotoUrl;
+    }
+
 }
