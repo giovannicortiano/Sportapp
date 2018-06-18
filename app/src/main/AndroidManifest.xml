@@ -2,27 +2,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.giovanni.sportapp.sportapp">
 
-    <uses-permission
-        android:name="android.permission.READ_EXTERNAL_STORAGE">
-    </uses-permission>
-
-    <uses-permission
-        android:name="android.permission.WRITE_EXTERNAL_STORAGE">
-    </uses-permission>
-
-    <uses-permission
-        android:name="android.permission.CAMERA">
-    </uses-permission>
-
-    <uses-permission
-        android:name="android.permission.INTERNET">
-    </uses-permission>
-
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"></uses-permission>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
+    <uses-permission android:name="android.permission.CAMERA"></uses-permission>
+    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
     /// só aparecer para celulares com camera.
     <uses-feature
         android:name="android.hardware.camera2"
-        android:required="true">
-    </uses-feature>
+        android:required="true"></uses-feature>
 
     <application
         android:allowBackup="true"
@@ -43,7 +30,17 @@
         <activity android:name=".Activitys.MainActivity" />
         <activity
             android:name=".Activitys.ConfiguracoesActivity"
-            android:parentActivityName=".Activitys.MainActivity">
+            android:parentActivityName=".Activitys.MainActivity"
+            android:windowSoftInputMode="stateHidden">
+        </activity>
+        <activity
+            android:name=".Activitys.PerfilActivity"
+            android:label="@string/title_activity_perfil"
+            android:parentActivityName=".Activitys.MainActivity"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.giovanni.sportapp.sportapp.Activitys.MainActivity" />
         </activity>
     </application>
 

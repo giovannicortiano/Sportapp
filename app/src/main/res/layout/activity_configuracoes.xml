@@ -12,14 +12,12 @@
     <include
         android:id="@+id/include"
         layout="@layout/tool_bar_principal"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/scrollViewConfiguracao"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_chainStyle="spread_inside"></include>
+        app:layout_constraintTop_toTopOf="parent"></include>
 
     <ScrollView
         android:id="@+id/scrollViewConfiguracao"
@@ -31,29 +29,13 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/include">
+        app:layout_constraintTop_toBottomOf="@+id/include"
+        app:layout_constraintVertical_bias="1.0">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/colorBackGround">
-
-            <EditText
-                android:id="@+id/edtNomeConfig"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:ems="10"
-                android:hint="@string/DigiteNome"
-                android:inputType="textPersonName"
-                android:singleLine="false"
-                app:layout_constraintBottom_toTopOf="@+id/edtSobreConfig"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
+            android:background="@color/colorBackGroundGrey">
 
             <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/ImagemPerfil"
@@ -76,15 +58,21 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
+                android:background="@drawable/fundo_caixa_texto_arredondada"
                 android:ems="10"
                 android:hint="@string/SobreVoce"
                 android:inputType="textMultiLine"
-                app:layout_constraintBottom_toTopOf="@+id/edtEsportesConfig"
+                android:minHeight="50dp"
+                android:paddingBottom="8dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingTop="8dp"
+                android:textColor="@color/colorTextDarkGrey"
+                app:layout_constraintBottom_toTopOf="@+id/TextEsportesConfig"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/edtNomeConfig" />
+                app:layout_constraintTop_toBottomOf="@+id/TextSobreConfig" />
 
             <EditText
                 android:id="@+id/edtEsportesConfig"
@@ -92,15 +80,21 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
+                android:background="@drawable/fundo_caixa_texto_arredondada"
                 android:ems="10"
-                android:hint="@string/SeusEsportes"
+                android:hint="@string/Esportes"
                 android:inputType="textMultiLine"
+                android:minHeight="50dp"
+                android:paddingBottom="8dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingTop="8dp"
+                android:textColor="@color/colorTextDarkGrey"
                 app:layout_constraintBottom_toTopOf="@+id/btnAtualizarConfig"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/edtSobreConfig" />
+                app:layout_constraintTop_toBottomOf="@+id/TextEsportesConfig" />
 
             <Button
                 android:id="@+id/btnAtualizarConfig"
@@ -108,7 +102,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
                 android:background="@color/colorPrimary"
                 android:text="@string/Atualizar"
                 android:textColor="@color/colorTextWhite"
@@ -122,7 +116,7 @@
                 android:id="@+id/textViewApagarConta"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="24dp"
+                android:layout_marginBottom="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="16dp"
@@ -142,7 +136,7 @@
                 android:layout_height="55dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
-                app:layout_constraintBottom_toTopOf="@+id/edtNomeConfig"
+                app:layout_constraintBottom_toTopOf="@+id/textDescricaoNomeConfig"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
@@ -174,12 +168,81 @@
                     app:srcCompat="@drawable/ic_photo_camera_cinza_24dp" />
             </android.support.constraint.ConstraintLayout>
 
+            <EditText
+                android:id="@+id/edtNomeConfig"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:background="@drawable/fundo_caixa_texto_arredondada"
+                android:ems="10"
+                android:hint="@string/DigiteNome"
+                android:inputType="textPersonName"
+                android:paddingBottom="8dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingTop="8dp"
+                android:singleLine="false"
+                android:textColor="@color/colorTextDarkGrey"
+                app:layout_constraintBottom_toTopOf="@+id/TextSobreConfig"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textDescricaoNomeConfig" />
+
+            <TextView
+                android:id="@+id/textDescricaoNomeConfig"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="12dp"
+                android:paddingLeft="16dp"
+                android:text="@string/DigiteNome"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/edtNomeConfig"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
+
+            <TextView
+                android:id="@+id/TextSobreConfig"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="12dp"
+                android:paddingLeft="16dp"
+                android:text="@string/SobreVoce"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/edtSobreConfig"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/edtNomeConfig" />
+
+            <TextView
+                android:id="@+id/TextEsportesConfig"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="12dp"
+                android:paddingLeft="16dp"
+                android:text="@string/SeusEsportes"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/edtEsportesConfig"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/edtSobreConfig" />
+
             <ProgressBar
                 android:id="@+id/progressBarConfig"
                 style="?android:attr/progressBarStyle"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
-                android:layout_marginBottom="8dp"
+                android:layout_marginBottom="224dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
@@ -200,7 +263,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:visibility="invisible"
-                app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
+                app:layout_constraintBottom_toBottomOf="@+id/ImagemPerfil"
                 app:layout_constraintEnd_toEndOf="@+id/ImagemPerfil"
                 app:layout_constraintStart_toStartOf="@+id/ImagemPerfil"
                 app:layout_constraintTop_toTopOf="@+id/ImagemPerfil" />

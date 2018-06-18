@@ -8,6 +8,8 @@
     <color name="colorBackGround">#ffffff</color>
     <color name="colorLighter">#ff706a</color>
     <color name="colorTextGrey">#cccccc</color>
+    <color name="colorBackGroundGrey">#f5f5f5</color>
+    <color name="colorTextDarkGrey">#5c5c5c</color>
 
 
 

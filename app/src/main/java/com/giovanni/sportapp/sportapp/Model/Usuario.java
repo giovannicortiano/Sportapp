@@ -4,7 +4,9 @@ import com.giovanni.sportapp.sportapp.Configuracoes.ConfiguradorFireBase;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Exclude;
 
-public class Usuario {
+import java.io.Serializable;
+
+public class Usuario implements Serializable{
     private String Id;
     private String Nome;
     private String Email;

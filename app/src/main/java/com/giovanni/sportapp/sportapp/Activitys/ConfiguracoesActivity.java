@@ -51,6 +51,9 @@ public class ConfiguracoesActivity extends AppCompatActivity {
     private Uri              LocalFotoPerfil;
     private StorageReference storageReference;
     private ProgressBar      ProgressBarImagem;
+    private TextView         TextViewNomeConfig;
+    private TextView         TextViewDescricaoConfig;
+    private TextView         TextViewEsportesConfig;
     private static final int SELECECAO_CAMERA = 100;
     private static final int SELECECAO_GALERIA = 200;
     private String[]         PermissoesNecesssarias = new String[]{
@@ -117,6 +120,9 @@ public class ConfiguracoesActivity extends AppCompatActivity {
         BtnCamera.setVisibility(visivel);
         BtnGaleriaFoto.setVisibility(visivel);
         TextViewCancelarConta.setVisibility(visivel);
+        TextViewNomeConfig.setVisibility(visivel);
+        TextViewDescricaoConfig.setVisibility(visivel);
+        TextViewEsportesConfig.setVisibility(visivel);
     }
 
     private void ConfigurarBtnAtualizarDadosClick(){
@@ -165,6 +171,9 @@ public class ConfiguracoesActivity extends AppCompatActivity {
         BtnAtualizar = findViewById(R.id.btnAtualizarConfig);
         ProgressBarConfig = findViewById(R.id.progressBarConfig);
         ProgressBarImagem = findViewById(R.id.progressBarImagem);
+        TextViewNomeConfig = findViewById(R.id.textDescricaoNomeConfig);
+        TextViewDescricaoConfig = findViewById(R.id.TextSobreConfig);
+        TextViewEsportesConfig = findViewById(R.id.TextEsportesConfig);
     }
 
     public void ConfigurarBtnCameraClick(){

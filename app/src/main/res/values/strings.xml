@@ -31,7 +31,7 @@
     <string name="Anuncios">Anuncios</string>
     <string name="Pessoas">Pessoas</string>
     <string name="SobreVoce">Sobre Você</string>
-    <string name="SeusEsportes">Seus esportes, ex: #tenis #futebol, #basquete, #natação</string>
+    <string name="Esportes">Ex: #tênis, #futebol, #basquete, #natação</string>
     <string name="Atualizar">Atualizar</string>
     <string name="ApagarConta">APAGAR CONTA</string>
     <string name="SucessoAtualizar">Sucesso ao atualizar</string>
@@ -40,6 +40,8 @@
     <string name="ParaUsarOSportappPrecisaPermissao">Para utilizar o Sportapp é necessário aceitar as permissões.</string>
     <string name="SucessoAoAtualizarImagem">Sucesso ao atualizar a imagem do perfil.</string>
     <string name="FalhaAoAtualizarImagem">Falha ao atualizar a imagem do perfil.</string>
+    <string name="title_activity_perfil">PerfilActivity</string>
+    <string name="SeusEsportes">Seus Esportes</string>
 
 
 </resources>
