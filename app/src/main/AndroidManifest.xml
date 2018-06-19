@@ -20,13 +20,16 @@
         android:theme="@style/AppTheme">
         <activity android:name=".Activitys.LoginActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"
+                    android:windowSoftInputMode="stateHidden"/>
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activitys.CadastroUsuarioActivity" />
-        <activity android:name=".Activitys.RecuperarSenhaActivity" />
+        <activity android:name=".Activitys.CadastroUsuarioActivity"
+            android:windowSoftInputMode="stateHidden"/>
+        <activity android:name=".Activitys.RecuperarSenhaActivity"
+            android:windowSoftInputMode="stateHidden"/>
         <activity android:name=".Activitys.MainActivity" />
         <activity
             android:name=".Activitys.ConfiguracoesActivity"
