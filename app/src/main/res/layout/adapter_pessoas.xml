@@ -9,17 +9,55 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/ImagemListaPessoa"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
         android:src="@drawable/perfil_padrao" />
 
-    <TextView
-        android:id="@+id/TextNomeListaPessoa"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:gravity="center_vertical"
-        android:padding="10dp"
-        android:text="Nome"
-        android:textStyle="bold" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/TextNomeListaPessoa"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:paddingBottom="3dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="5dp"
+            android:paddingTop="3dp"
+            android:text="Nome"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/TextEsportesListaPessoa"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:hint="Esporte não informado"
+            android:paddingLeft="10dp"
+            android:paddingRight="5dp"
+            android:paddingTop="1dp"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/TextDistanciaListaPessoas"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:hint="Distância"
+            android:paddingBottom="1dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="5dp"
+            android:textSize="14sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@android:color/darker_gray"/>
+    </LinearLayout>
+
 </LinearLayout>

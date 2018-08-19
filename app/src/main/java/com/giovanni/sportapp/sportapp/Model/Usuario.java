@@ -1,10 +1,9 @@
 package com.giovanni.sportapp.sportapp.Model;
 
-import com.giovanni.sportapp.sportapp.Configuracoes.ConfiguradorFireBase;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.Exclude;
 
+import com.google.firebase.database.Exclude;
 import java.io.Serializable;
+import java.util.List;
 
 public class Usuario implements Serializable{
     private String Id;
@@ -14,13 +13,35 @@ public class Usuario implements Serializable{
     private String Sobre;
     private String Esportes;
     private String FotoUrl;
+    private String g;///padrão para nome do HashGeo
+    private List<Double> l;///padrão para gravar longitude/latitude
+    private double RaioDeKm;
 
     public Usuario() {
     }
 
-    public void GravarNoBancoDeDados(){
-        DatabaseReference referenciaFireBase = ConfiguradorFireBase.getBancoDeDadosFireBase();
-        referenciaFireBase.child("Usuarios").child(getId()).setValue(this);
+    public double getRaioDeKm() {
+        return RaioDeKm;
+    }
+
+    public void setRaioDeKm(double raioDeKm) {
+        RaioDeKm = raioDeKm;
+    }
+
+    public String getG() {
+        return g;
+    }
+
+    public void setG(String g) {
+        this.g = g;
+    }
+
+    public List<Double> getL() {
+        return l;
+    }
+
+    public void setL(List<Double> l) {
+        this.l = l;
     }
 
     public String getId() {
@@ -63,7 +84,6 @@ public class Usuario implements Serializable{
         Email = email;
     }
 
-
     public void setSenha(String senha) {
         Senha = senha;
     }
@@ -72,7 +92,6 @@ public class Usuario implements Serializable{
     public String getSenha() {
         return Senha;
     }
-
 
     public String getFotoUrl() {
         return FotoUrl;

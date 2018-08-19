@@ -1,5 +1,6 @@
 package com.giovanni.sportapp.sportapp.Activitys;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -10,10 +11,13 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.giovanni.sportapp.sportapp.Configuracoes.ConfiguradorFireBase;
+import com.giovanni.sportapp.sportapp.Model.Mensagem;
 import com.giovanni.sportapp.sportapp.Model.Usuario;
 import com.giovanni.sportapp.sportapp.R;
 
-import org.w3c.dom.Text;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -23,12 +27,14 @@ public class PerfilActivity extends AppCompatActivity {
     private TextView TextViewEsportes;
     private TextView TextViewSobre;
     private CircleImageView ImagemPerfil;
+    private FloatingActionButton BtnEnviarMensagem;
 
     private void RecuperarViews(){
         TextViewNome = findViewById(R.id.textNomeTelaPerfil);
         TextViewEsportes = findViewById(R.id.TextEsportesPerfil);
         TextViewSobre = findViewById(R.id.TextSobrePerfil);
         ImagemPerfil = findViewById(R.id.imagemTelaPerfil);
+        BtnEnviarMensagem = findViewById(R.id.btnEnviarMensagem);
     }
 
     @Override
@@ -58,16 +64,17 @@ public class PerfilActivity extends AppCompatActivity {
         else{
             ImagemPerfil.setImageResource(R.drawable.perfil_padrao);
         }
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        BtnEnviarMensagem.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+            public void onClick(View v) {
+                Intent intent = new Intent(PerfilActivity.this, ConversaActivity.class);
+                intent.putExtra("Usuario",UsuarioPerfil);
+                startActivity(intent);
             }
         });
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
     }
 
 }

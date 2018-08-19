@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_margin="8dp"
+        android:background="@drawable/balao_conversa_direita"
+        android:minWidth="130dp"
+        android:orientation="vertical"
+        android:padding="12dp">
+
+        <TextView
+            android:id="@+id/textViewMensagemConversa"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="110dp"
+            android:text="Oi"
+            android:textColor="@color/colorTextWhite"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/textDataHoraConversa"
+            android:layout_width="match_parent"
+            android:layout_height="12dp"
+            android:layout_weight="1"
+            android:drawablePadding="2dp"
+            android:drawableRight="@drawable/ic_check_white_24dp"
+            android:text="25/06/2018 12:01"
+            android:textColor="@color/colorBackDarkGroundGrey"
+            android:textSize="10sp"
+            tools:layout_editor_absoluteX="12dp"
+            tools:layout_editor_absoluteY="539dp" />
+
+    </LinearLayout>
+</RelativeLayout>

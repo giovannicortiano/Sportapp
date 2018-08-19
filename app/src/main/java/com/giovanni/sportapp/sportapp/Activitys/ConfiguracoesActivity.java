@@ -21,83 +21,88 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.bumptech.glide.Glide;
-import com.giovanni.sportapp.sportapp.Configuracoes.ConfiguradorFireBase;
 import com.giovanni.sportapp.sportapp.Model.Usuario;
+import com.giovanni.sportapp.sportapp.Model.UsuarioDao;
+import com.giovanni.sportapp.sportapp.Model.UsuarioDaoFirebase;
 import com.giovanni.sportapp.sportapp.R;
 import com.giovanni.sportapp.sportapp.Utils.ValidadorDePermissao;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.util.Observable;
+import java.util.Observer;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class ConfiguracoesActivity extends AppCompatActivity {
+public class ConfiguracoesActivity extends AppCompatActivity implements Observer {
 
-    private Toolbar          ToolBarConfiguracoes;
-    private CircleImageView  ImagemPerfil;
-    private ImageButton      BtnCamera;
-    private ImageButton      BtnGaleriaFoto;
-    private Button           BtnAtualizar;
-    private TextView         TextViewCancelarConta;
-    private EditText         EdtNome;
-    private EditText         EdtSobre;
-    private EditText         EdtEsportes;
-    private Usuario          UsuarioAtual;
-    private ProgressBar      ProgressBarConfig;
-    private Uri              LocalFotoPerfil;
-    private StorageReference storageReference;
-    private ProgressBar      ProgressBarImagem;
-    private TextView         TextViewNomeConfig;
-    private TextView         TextViewDescricaoConfig;
-    private TextView         TextViewEsportesConfig;
+    private Toolbar ToolBarConfiguracoes;
+    private CircleImageView ImagemPerfil;
+    private ImageButton BtnCamera;
+    private ImageButton BtnGaleriaFoto;
+    private Button BtnAtualizar;
+    private TextView TextViewCancelarConta;
+    private EditText EdtNome;
+    private EditText EdtSobre;
+    private EditText EdtEsportes;
+    private ProgressBar ProgressBarConfig;
+    private Uri LocalFotoPerfil;
+    private ProgressBar ProgressBarImagem;
+    private TextView TextViewNomeConfig;
+    private TextView TextViewDescricaoConfig;
+    private TextView TextViewEsportesConfig;
     private static final int SELECECAO_CAMERA = 100;
     private static final int SELECECAO_GALERIA = 200;
-    private String[]         PermissoesNecesssarias = new String[]{
+    private Usuario usuarioLogado;
+    private UsuarioDao usuarioDaoFireBase;
+
+
+    private String[] PermissoesNecesssarias = new String[]{
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            Manifest.permission.CAMERA
+            Manifest.permission.CAMERA,
     };
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_configuracoes);
-        ToolBarConfiguracoes = findViewById(R.id.toolBarPrincipal);
+        RecuperarViews();
+
+        usuarioDaoFireBase = new UsuarioDaoFirebase();
+        usuarioDaoFireBase.AddObserver(this);
+        usuarioDaoFireBase.ConsultarUsuarioPorId(usuarioDaoFireBase.RetornarIdUsuarioLogado());
+
         ToolBarConfiguracoes.setTitle(R.string.Configuracoes);
-        storageReference = ConfiguradorFireBase.getArmazenadorDeImagensFireBase();
         setSupportActionBar(ToolBarConfiguracoes);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        ValidadorDePermissao.ValidarPermissoes(this,PermissoesNecesssarias);
-        RecuperarViews();
+
+        ValidadorDePermissao.ValidarPermissoes(this, PermissoesNecesssarias);
+
         ProgressBarConfig.setVisibility(View.VISIBLE);
         ConfigurarVisibilidadeDosComponentes(View.INVISIBLE);
-        BuscarUsuarioAtual();
+
         ConfigurarBtnCameraClick();
         ConfigurarBtnGaleriaFotoClick();
         ConfigurarBtnAtualizarDadosClick();
     }
 
-    private void BuscarUsuarioAtual (){
-        FirebaseUser UsuarioFireBase = ConfiguradorFireBase.getAutenticadorFireBase().getCurrentUser();
-        ConfiguradorFireBase.getBancoDeDadosFireBase().child("Usuarios").child(UsuarioFireBase.getUid())
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                       UsuarioAtual = dataSnapshot.getValue(Usuario.class);
-                       ConfigurarVisibilidadeDosComponentes(View.VISIBLE);
-                       PreencherDadosUsuarioAtual();
-                       ProgressBarConfig.setVisibility(View.INVISIBLE);
-                    }
+    @Override
+    public void update(Observable o, Object arg) {
+        if (o instanceof UsuarioDaoFirebase){
+            if ((arg != null) && (arg instanceof Usuario)){
+                usuarioLogado = (Usuario) arg;
+                ConfigurarVisibilidadeDosComponentes(View.VISIBLE);
+                PreencherDadosUsuarioLogado();
+                ProgressBarConfig.setVisibility(View.INVISIBLE);
+            }
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
+            if ((arg != null) && (arg instanceof String)){
+                Toast.makeText(ConfiguracoesActivity.this,(String) arg,Toast.LENGTH_SHORT).show();
+                ProgressBarImagem.setVisibility(View.INVISIBLE);
+                ProgressBarConfig.setVisibility(View.INVISIBLE);
+            }
+        }
     }
 
     @Override
@@ -131,7 +136,6 @@ public class ConfiguracoesActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (ValidarPreenchimentoCampos()){
                     AtualizarDadosUsuario();
-                    Toast.makeText(ConfiguracoesActivity.this,R.string.SucessoAtualizar,Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -147,17 +151,17 @@ public class ConfiguracoesActivity extends AppCompatActivity {
         }
         return true;
     }
-    private void PreencherDadosUsuarioAtual(){
-        if (UsuarioAtual.getFotoUrl() != null){
-            Glide.with(ConfiguracoesActivity.this).load(UsuarioAtual.getFotoUrl()).into(ImagemPerfil);
+    private void PreencherDadosUsuarioLogado(){
+        if (usuarioLogado.getFotoUrl() != null){
+            Glide.with(ConfiguracoesActivity.this).load(usuarioLogado.getFotoUrl()).into(ImagemPerfil);
         }
         else{
             ImagemPerfil.setImageResource(R.drawable.perfil_padrao);
         }
 
-        EdtNome.setText(UsuarioAtual.getNome());
-        EdtSobre.setText(UsuarioAtual.getSobre());
-        EdtEsportes.setText(UsuarioAtual.getEsportes());
+        EdtNome.setText(usuarioLogado.getNome());
+        EdtSobre.setText(usuarioLogado.getSobre());
+        EdtEsportes.setText(usuarioLogado.getEsportes());
     }
 
     public void RecuperarViews(){
@@ -174,6 +178,7 @@ public class ConfiguracoesActivity extends AppCompatActivity {
         TextViewNomeConfig = findViewById(R.id.textDescricaoNomeConfig);
         TextViewDescricaoConfig = findViewById(R.id.TextSobreConfig);
         TextViewEsportesConfig = findViewById(R.id.TextEsportesConfig);
+        ToolBarConfiguracoes = findViewById(R.id.toolBarPrincipal);
     }
 
     public void ConfigurarBtnCameraClick(){
@@ -254,34 +259,27 @@ public class ConfiguracoesActivity extends AppCompatActivity {
 
     }
 
-    private void SalvarImagemPerfilFireBase(){
+    private void SalvarImagemPerfilFireBase() {
         if (LocalFotoPerfil != null){
-            StorageReference ImagemPerfilFireBase = storageReference.child("imagens")
-                    .child("perfil")
-                    .child(UsuarioAtual.getId() + ".jpeg");
-
-            ImagemPerfilFireBase.putFile(LocalFotoPerfil).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    UsuarioAtual.setFotoUrl(taskSnapshot.getDownloadUrl().toString());
-                    UsuarioAtual.GravarNoBancoDeDados();
-                    ProgressBarImagem.setVisibility(View.INVISIBLE);
-                    Toast.makeText(ConfiguracoesActivity.this,R.string.SucessoAoAtualizarImagem,Toast.LENGTH_LONG).show();
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(ConfiguracoesActivity.this,R.string.FalhaAoAtualizarImagem,Toast.LENGTH_SHORT).show();
-                }
-            });
+            ProgressBarImagem.setVisibility(View.VISIBLE);
+            InputStream imagemStream = null;
+            try {
+                imagemStream = getContentResolver().openInputStream(LocalFotoPerfil);
+                usuarioDaoFireBase.AtualizarImagemPerfilUsuario(imagemStream, usuarioLogado);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (Exception e){
+                e.printStackTrace();
+            }
         }
-
     }
 
     private void AtualizarDadosUsuario(){
-        UsuarioAtual.setNome(EdtNome.getText().toString());
-        UsuarioAtual.setSobre(EdtSobre.getText().toString());
-        UsuarioAtual.setEsportes(EdtEsportes.getText().toString());
-        UsuarioAtual.GravarNoBancoDeDados();
+        usuarioLogado.setNome(EdtNome.getText().toString());
+        usuarioLogado.setSobre(EdtSobre.getText().toString());
+        usuarioLogado.setEsportes(EdtEsportes.getText().toString());
+        ProgressBarConfig.setVisibility(View.VISIBLE);
+        usuarioDaoFireBase.GravarUsuarioNoBancoDeDados(usuarioLogado,true);
     }
+
 }

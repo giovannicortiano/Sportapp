@@ -1,7 +1,6 @@
 package com.giovanni.sportapp.sportapp.Activitys;
 
 import android.content.Intent;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -12,34 +11,31 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.giovanni.sportapp.sportapp.Configuracoes.ConfiguradorFireBase;
+import com.giovanni.sportapp.sportapp.Model.AutenticadorDeUsuario;
+import com.giovanni.sportapp.sportapp.Model.AutenticadorDeUsuarioFirebase;
 import com.giovanni.sportapp.sportapp.R;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
-import com.google.firebase.auth.FirebaseAuthInvalidUserException;
-import com.google.firebase.auth.FirebaseUser;
 
-public class LoginActivity extends AppCompatActivity {
+import java.util.Observable;
+import java.util.Observer;
 
-    private Button btnEntrar;
-    private TextView TextViewCadastreSe;
-    private TextView TextViewRecuperarSenha;
-    private EditText EdtEmailLogin;
-    private EditText EdtSenhaLogin;
-    private TextView TextViewConfirmarEmail;
-    private FirebaseAuth AutenticadorFireBase;
-    private ProgressBar ProgressBarLogin;
+public class LoginActivity extends AppCompatActivity implements Observer {
 
-
+    private Button                btnEntrar;
+    private TextView              textViewCadastreSe;
+    private TextView              textViewRecuperarSenha;
+    private EditText              edtEmailLogin;
+    private EditText              edtSenhaLogin;
+    private TextView              textViewConfirmarEmail;
+    private ProgressBar           progressBarLogin;
+    private AutenticadorDeUsuario autenticadorDeUsuario;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         RecuperarViews();
+        autenticadorDeUsuario = new AutenticadorDeUsuarioFirebase();
+        autenticadorDeUsuario.AddObserver(this);
         VincularTextViewCadastreSeOnClick();
         VincularTextViewRecuperarSenhaOnClick();
         VincularBtnEntrarOnClick();
@@ -50,18 +46,17 @@ public class LoginActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         VerificarUsuarioLogado();
-
     }
 
     private void RecuperarViews(){
         btnEntrar = findViewById(R.id.btnEntrar);
-        TextViewCadastreSe = findViewById(R.id.TextViewCadastreSe);
-        TextViewRecuperarSenha = findViewById(R.id.TextViewEsqueceuSenha);
-        EdtEmailLogin = findViewById(R.id.edtEmailLogin);
-        EdtSenhaLogin = findViewById(R.id.edtSenhaLogin);
-        TextViewConfirmarEmail = findViewById(R.id.TextViewConfirmarEmail);
-        ProgressBarLogin = findViewById(R.id.progressLogin);
-        EdtEmailLogin.addTextChangedListener(new TextWatcher() {
+        textViewCadastreSe = findViewById(R.id.TextViewCadastreSe);
+        textViewRecuperarSenha = findViewById(R.id.TextViewEsqueceuSenha);
+        edtEmailLogin = findViewById(R.id.edtEmailLogin);
+        edtSenhaLogin = findViewById(R.id.edtSenhaLogin);
+        textViewConfirmarEmail = findViewById(R.id.TextViewConfirmarEmail);
+        progressBarLogin = findViewById(R.id.progressLogin);
+        edtEmailLogin.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -74,51 +69,26 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (EdtEmailLogin.getText().toString().isEmpty()) {
-                    TextViewConfirmarEmail.setVisibility(View.INVISIBLE);
-                    ConfiguradorFireBase.getAutenticadorFireBase().signOut();
+                if (edtEmailLogin.getText().toString().isEmpty()) {
+                    textViewConfirmarEmail.setVisibility(View.INVISIBLE);
+                    autenticadorDeUsuario.FazerLogoffUsuarioLogado();
                 }
             }
         });
     }
 
     private void VincularTextViewEmailNaoConfirmadoOnClick(){
-        TextViewConfirmarEmail.setOnClickListener(new View.OnClickListener() {
+        textViewConfirmarEmail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FirebaseUser UsuarioAtual = FirebaseAuth.getInstance().getCurrentUser();
-                if (UsuarioAtual == null){
-                    return;
-                }
-                ProgressBarLogin.setVisibility(View.VISIBLE);
-                UsuarioAtual.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Toast.makeText(LoginActivity.this,R.string.EmailReenviado,Toast.LENGTH_LONG).show();
-                        }
-                        else{
-                            try{
-                                throw task.getException();
-                                        }
-                            catch (FirebaseAuthInvalidUserException e){
-                                Toast.makeText(LoginActivity.this, R.string.UsuarioNaoCadastrado,Toast.LENGTH_SHORT).show();
-                            }
-                            catch (Exception e){
-                                Toast.makeText(LoginActivity.this,R.string.ErroDesconhecido + " " + e.getMessage(),Toast.LENGTH_SHORT).show();
-                                e.printStackTrace();
-                            }
-                        }
-                        ProgressBarLogin.setVisibility(View.INVISIBLE);
-                    }
-                });
+                progressBarLogin.setVisibility(View.VISIBLE);
+                autenticadorDeUsuario.EnviarEmailDeConfirmacao();
             }
         });
-
     }
 
     private void VincularTextViewCadastreSeOnClick(){
-        TextViewCadastreSe.setOnClickListener(new View.OnClickListener() {
+        textViewCadastreSe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(LoginActivity.this,CadastroUsuarioActivity.class));
@@ -127,7 +97,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void VincularTextViewRecuperarSenhaOnClick(){
-        TextViewRecuperarSenha.setOnClickListener(new View.OnClickListener() {
+        textViewRecuperarSenha.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(LoginActivity.this,RecuperarSenhaActivity.class));
@@ -136,29 +106,9 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void AutenticarUsuario(){
-        AutenticadorFireBase = ConfiguradorFireBase.getAutenticadorFireBase();
-        ProgressBarLogin.setVisibility(View.VISIBLE);
-        AutenticadorFireBase.signInWithEmailAndPassword(EdtEmailLogin.getText().toString(), EdtSenhaLogin.getText().toString())
-                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
-                                VerificarUsuarioLogado();
-                            } else {
-                                try {
-                                    throw task.getException();
-                                } catch (FirebaseAuthInvalidUserException e) {
-                                    Toast.makeText(getApplicationContext(), R.string.UsuarioNaoCadastrado, Toast.LENGTH_SHORT).show();
-                                } catch (FirebaseAuthInvalidCredentialsException e) {
-                                    Toast.makeText(getApplicationContext(), R.string.UsuarioOuSenhaInva, Toast.LENGTH_SHORT).show();
-                                } catch (Exception e) {
-                                    Toast.makeText(getApplicationContext(), R.string.ErroDesconhecido + ". " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                                    e.printStackTrace();
-                                }
-                                ProgressBarLogin.setVisibility(View.INVISIBLE);
-                            }
-                        }
-                    });
+        progressBarLogin.setVisibility(View.VISIBLE);
+        autenticadorDeUsuario.AutenticarUsuario(edtEmailLogin.getText().toString(),
+                edtSenhaLogin.getText().toString());
     }
 
     private void VincularBtnEntrarOnClick(){
@@ -173,11 +123,11 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private boolean ValidarPreenchimentoDosCampos(){
-        if (EdtEmailLogin.getText().toString().isEmpty()){
+        if (edtEmailLogin.getText().toString().isEmpty()){
             Toast.makeText(getApplicationContext(),R.string.CampoEmailObrigatorio,Toast.LENGTH_SHORT).show();
             return false;
         }
-        else if (EdtSenhaLogin.getText().toString().isEmpty()){
+        else if (edtSenhaLogin.getText().toString().isEmpty()){
             Toast.makeText(getApplicationContext(),R.string.CampoSenhaObrigatorio,Toast.LENGTH_SHORT).show();
             return false;
         }
@@ -186,24 +136,29 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void VerificarUsuarioLogado(){
-        FirebaseUser UsuarioAtual;
-        AutenticadorFireBase = ConfiguradorFireBase.getAutenticadorFireBase();
-
-        UsuarioAtual = AutenticadorFireBase.getCurrentUser();
-
-
-
-        if (UsuarioAtual != null){
-            if (UsuarioAtual.isEmailVerified()) {
-                TextViewConfirmarEmail.setVisibility(View.INVISIBLE);
+        if (autenticadorDeUsuario.VerificarSeUsuarioAutenticado()){
+            if (autenticadorDeUsuario.VerificarSeEmailConfirmado()){
+                textViewConfirmarEmail.setVisibility(View.INVISIBLE);
                 startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                ProgressBarLogin.setVisibility(View.INVISIBLE);
+                progressBarLogin.setVisibility(View.INVISIBLE);
             }
             else{
-                TextViewConfirmarEmail.setVisibility(View.VISIBLE);
-                EdtEmailLogin.setText(UsuarioAtual.getEmail());
-                ProgressBarLogin.setVisibility(View.INVISIBLE);
+                textViewConfirmarEmail.setVisibility(View.VISIBLE);
+                edtEmailLogin.setText(autenticadorDeUsuario.RetornarEmailUsuarioLogado());
+                progressBarLogin.setVisibility(View.INVISIBLE);
             }
         }
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        progressBarLogin.setVisibility(View.INVISIBLE);
+        if (o instanceof AutenticadorDeUsuarioFirebase){
+            if (arg != null && arg instanceof String){
+                Toast.makeText(getApplicationContext(),(String) arg,Toast.LENGTH_SHORT).show();
+            }
+            VerificarUsuarioLogado();
+        }
+
     }
 }

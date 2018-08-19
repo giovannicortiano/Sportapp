@@ -42,6 +42,7 @@
     <string name="FalhaAoAtualizarImagem">Falha ao atualizar a imagem do perfil.</string>
     <string name="title_activity_perfil">PerfilActivity</string>
     <string name="SeusEsportes">Seus Esportes</string>
+    <string name="title_activity_conversa">ConversaActivity</string>
 
 
 </resources>

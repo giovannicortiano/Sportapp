@@ -1,6 +1,5 @@
 package com.giovanni.sportapp.sportapp.Activitys;
 
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -8,25 +7,25 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
-
-import com.giovanni.sportapp.sportapp.Configuracoes.ConfiguradorFireBase;
+import com.giovanni.sportapp.sportapp.Model.AutenticadorDeUsuario;
+import com.giovanni.sportapp.sportapp.Model.AutenticadorDeUsuarioFirebase;
 import com.giovanni.sportapp.sportapp.R;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthEmailException;
-import com.google.firebase.auth.FirebaseAuthInvalidUserException;
+import java.util.Observable;
+import java.util.Observer;
 
-public class RecuperarSenhaActivity extends AppCompatActivity {
-    private EditText edtEmailRecuperarSenha;
-    private Button btnRecuperarSenha;
-    private ProgressBar ProgressBarEmail;
+public class RecuperarSenhaActivity extends AppCompatActivity implements Observer{
+    private EditText              edtEmailRecuperarSenha;
+    private Button                btnRecuperarSenha;
+    private ProgressBar           progressBarEmail;
+    private AutenticadorDeUsuario autenticadorDeUsuario;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recuperar_senha);
         RecuperarViews();
+        autenticadorDeUsuario = new AutenticadorDeUsuarioFirebase();
+        autenticadorDeUsuario.AddObserver(this);
         btnRecuperarSenha.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -40,7 +39,7 @@ public class RecuperarSenhaActivity extends AppCompatActivity {
     private void RecuperarViews(){
         edtEmailRecuperarSenha = findViewById(R.id.edtEmailRecuperarSenha);
         btnRecuperarSenha = findViewById(R.id.btnRecuperarSenha);
-        ProgressBarEmail = findViewById(R.id.progressEmail);
+        progressBarEmail = findViewById(R.id.progressEmail);
     }
 
     private boolean ValidarPreechimentoDosCampos(){
@@ -52,32 +51,20 @@ public class RecuperarSenhaActivity extends AppCompatActivity {
     }
 
     private void EnviarEmailRecuperacaoSenha(){
-        FirebaseAuth AutenticadorFireBase = ConfiguradorFireBase.getAutenticadorFireBase();
-        ProgressBarEmail.setVisibility(View.VISIBLE);
-        AutenticadorFireBase.sendPasswordResetEmail(edtEmailRecuperarSenha.getText().toString()).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()){
-                    Toast.makeText(getApplicationContext(),R.string.EmailEnviadoPara + edtEmailRecuperarSenha.getText().toString(),Toast.LENGTH_SHORT).show();
-                    ProgressBarEmail.setVisibility(View.INVISIBLE);
-                    finish();
-                }
-                else {
-                    try{
-                        throw task.getException();
-                    }
-                    catch (FirebaseAuthInvalidUserException e){
-                        Toast.makeText(RecuperarSenhaActivity.this, R.string.EmailNaoCastrado,Toast.LENGTH_SHORT).show();
-                    }
-                    catch (Exception e){
-                        Toast.makeText(getApplicationContext(),R.string.ErroDesconhecido + ". " + e.getMessage(),Toast.LENGTH_SHORT).show();
-                        e.printStackTrace();
-                    }
-                    ProgressBarEmail.setVisibility(View.INVISIBLE);
-                }
-            }
-        });
-
+        progressBarEmail.setVisibility(View.VISIBLE);
+        autenticadorDeUsuario.EnviarEmailRecuperacaoDeSenha(edtEmailRecuperarSenha.getText().toString());
     }
 
+    @Override
+    public void update(Observable o, Object arg) {
+        if (o instanceof AutenticadorDeUsuarioFirebase){
+            progressBarEmail.setVisibility(View.INVISIBLE);
+            if (arg instanceof String){
+                Toast.makeText(getApplicationContext(),(String) arg,Toast.LENGTH_SHORT).show();
+                if (autenticadorDeUsuario.getMsgEmailSenhaSucesso().equals(arg)){
+                    finish();
+                }
+            }
+        }
+    }
 }

@@ -1,13 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-
-    <item android:id="@+id/menuPesquisa"
-        android:title="@string/Pesquisar"
-        app:showAsAction="always"
-        android:icon="@drawable/ic_search_white_24dp"
-        />
-
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
     <item
         android:id="@+id/menuConfiguracoes"
         android:title="@string/Configuracoes"
@@ -18,6 +12,13 @@
         android:id="@+id/menuSair"
         android:title="@string/Sair"
         app:showAsAction="never"
+
+        />
+    <item
+        android:id="@+id/menuPesquisar"
+        android:title=""
+        android:icon="@drawable/ic_search_white_24dp"
+        app:showAsAction="always"
 
         />
 

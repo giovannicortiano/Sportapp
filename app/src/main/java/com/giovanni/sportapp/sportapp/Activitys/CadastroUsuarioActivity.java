@@ -1,37 +1,32 @@
 package com.giovanni.sportapp.sportapp.Activitys;
 
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
-import com.giovanni.sportapp.sportapp.Configuracoes.ConfiguradorFireBase;
+import com.giovanni.sportapp.sportapp.Model.AutenticadorDeUsuario;
+import com.giovanni.sportapp.sportapp.Model.AutenticadorDeUsuarioFirebase;
 import com.giovanni.sportapp.sportapp.Model.Usuario;
+import com.giovanni.sportapp.sportapp.Model.UsuarioDao;
+import com.giovanni.sportapp.sportapp.Model.UsuarioDaoFirebase;
 import com.giovanni.sportapp.sportapp.R;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthEmailException;
-import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
-import com.google.firebase.auth.FirebaseAuthInvalidUserException;
-import com.google.firebase.auth.FirebaseAuthUserCollisionException;
-import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
-import com.google.firebase.auth.FirebaseUser;
+import java.util.Observable;
+import java.util.Observer;
 
-public class CadastroUsuarioActivity extends AppCompatActivity {
+public class CadastroUsuarioActivity extends AppCompatActivity implements Observer {
 
-    private EditText edtNomeCadastroUsuario;
-    private EditText edtSenhaCadastroUsuario;
-    private EditText edtEmailCadastroUsuario;
-    private Button btnCadastrarUsuario;
-    private FirebaseAuth AutenticadorFireBase;
-    private ProgressBar ProgressBarCadastro;
-    private Usuario NovoUsuario;
+    private EditText              edtNomeCadastroUsuario;
+    private EditText              edtSenhaCadastroUsuario;
+    private EditText              edtEmailCadastroUsuario;
+    private Button                btnCadastrarUsuario;
+    private ProgressBar           progressBarCadastro;
+    private Usuario               novoUsuario;
+    private UsuarioDao            usuarioDao;
+    private AutenticadorDeUsuario autenticadorDeUsuario;
+    private static final int      RAIO_DE_KM_PADRAO = 30;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +34,11 @@ public class CadastroUsuarioActivity extends AppCompatActivity {
         setContentView(R.layout.activity_cadastro_usuario);
 
         RecuperarViews();
+        usuarioDao = new UsuarioDaoFirebase();
+        usuarioDao.AddObserver(this);
+
+        autenticadorDeUsuario = new AutenticadorDeUsuarioFirebase();
+        autenticadorDeUsuario.AddObserver(this);
 
         btnCadastrarUsuario.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,7 +55,7 @@ public class CadastroUsuarioActivity extends AppCompatActivity {
         edtSenhaCadastroUsuario = findViewById(R.id.edtSenhaCadastro);
         edtEmailCadastroUsuario = findViewById(R.id.edtEmailCadastro);
         btnCadastrarUsuario = findViewById(R.id.btnCadastrar);
-        ProgressBarCadastro = findViewById(R.id.progressCadastro);
+        progressBarCadastro = findViewById(R.id.progressCadastro);
     }
 
     public boolean ValidarPreenchimentoDosCampos(){
@@ -74,72 +74,37 @@ public class CadastroUsuarioActivity extends AppCompatActivity {
         return  true;
     }
 
-    private void EnviarEmailConfirmacao(){
-        FirebaseUser UsuarioAtual = FirebaseAuth.getInstance().getCurrentUser();
-
-        UsuarioAtual.sendEmailVerification()
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Toast.makeText(CadastroUsuarioActivity.this,R.string.UsuarioCadastradoComSucesso,Toast.LENGTH_LONG).show();
-                            ProgressBarCadastro.setVisibility(View.INVISIBLE);
-                            finish();
-                        }
-                        else{
-                            try{
-                                throw task.getException();
-                            }
-                            catch (FirebaseAuthInvalidUserException e){
-                                Toast.makeText(CadastroUsuarioActivity.this,R.string.UsuarioNaoCadastrado,Toast.LENGTH_SHORT).show();
-                            }
-                            catch (Exception e){
-                                Toast.makeText(CadastroUsuarioActivity.this,R.string.ErroDesconhecido + " " + e.getMessage(),Toast.LENGTH_SHORT).show();
-                                e.printStackTrace();
-                            }
-                            ProgressBarCadastro.setVisibility(View.INVISIBLE);
-                        }
-                    }
-                });
+    private void CadastrarUsuario(){
+        novoUsuario = new Usuario();
+        novoUsuario.setNome(edtNomeCadastroUsuario.getText().toString());
+        novoUsuario.setSenha(edtSenhaCadastroUsuario.getText().toString());
+        novoUsuario.setEmail(edtEmailCadastroUsuario.getText().toString());
+        novoUsuario.setRaioDeKm(RAIO_DE_KM_PADRAO);
+        progressBarCadastro.setVisibility(View.VISIBLE);
+        usuarioDao.CriarNovoUsuario(novoUsuario);
     }
 
-    private void CadastrarUsuario(){
-        NovoUsuario = new Usuario();
-        NovoUsuario.setNome(edtNomeCadastroUsuario.getText().toString());
-        NovoUsuario.setSenha(edtSenhaCadastroUsuario.getText().toString());
-        NovoUsuario.setEmail(edtEmailCadastroUsuario.getText().toString());
-
-        ProgressBarCadastro.setVisibility(View.VISIBLE);
-        AutenticadorFireBase = ConfiguradorFireBase.getAutenticadorFireBase();
-        AutenticadorFireBase.createUserWithEmailAndPassword(NovoUsuario.getEmail(),NovoUsuario.getSenha()).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()){
-                    FirebaseUser UsuarioAtual = FirebaseAuth.getInstance().getCurrentUser();
-                    NovoUsuario.setId(UsuarioAtual.getUid());
-                    NovoUsuario.GravarNoBancoDeDados();
-                    EnviarEmailConfirmacao();
+    @Override
+    public void update(Observable o, Object arg) {
+        if (o instanceof UsuarioDaoFirebase){
+            progressBarCadastro.setVisibility(View.INVISIBLE);
+            if (arg != null &&  arg instanceof String){
+                Toast.makeText(CadastroUsuarioActivity.this,(String) arg,Toast.LENGTH_SHORT).show();
+                if (usuarioDao.getMsgSucessoSalvarUsuario().equals(arg)){
+                    progressBarCadastro.setVisibility(View.VISIBLE);
+                    autenticadorDeUsuario.EnviarEmailDeConfirmacao();
                 }
-                else{
-                    try {
-                        throw task.getException();
-                    }
-                    catch (FirebaseAuthWeakPasswordException e){
-                        Toast.makeText(getApplicationContext(), R.string.DigiteSenhaMaisForte ,Toast.LENGTH_SHORT).show();
-                    }
-                    catch (FirebaseAuthInvalidCredentialsException e){
-                        Toast.makeText(getApplicationContext(),R.string.EmailInvalido,Toast.LENGTH_SHORT).show();
-                    }
-                    catch (FirebaseAuthUserCollisionException e){
-                        Toast.makeText(getApplicationContext(),R.string.EmailJaCadastrado ,Toast.LENGTH_SHORT).show();
-                    }
-                    catch (Exception e){
-                        Toast.makeText(getApplicationContext(),R.string.ErroDesconhecido + e.getMessage() ,Toast.LENGTH_SHORT).show();
-                        e.printStackTrace();
-                    }
-                    ProgressBarCadastro.setVisibility(View.INVISIBLE);
+
+            }
+        }
+        else if (o instanceof  AutenticadorDeUsuarioFirebase){
+            progressBarCadastro.setVisibility(View.INVISIBLE);
+            if (arg != null &&  arg instanceof String){
+                Toast.makeText(CadastroUsuarioActivity.this,(String) arg,Toast.LENGTH_SHORT).show();
+                if(autenticadorDeUsuario.getMsgEmailConfirmacaoSucesso().equals(arg)){
+                    finish();
                 }
             }
-        });
+        }
     }
 }
