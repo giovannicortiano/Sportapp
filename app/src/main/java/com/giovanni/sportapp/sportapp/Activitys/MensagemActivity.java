@@ -12,61 +12,70 @@ import android.widget.EditText;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.giovanni.sportapp.sportapp.Adapters.MensagensAdapter;
-import com.giovanni.sportapp.sportapp.Configuracoes.ConfiguradorFireBase;
 import com.giovanni.sportapp.sportapp.Model.Conversa;
+import com.giovanni.sportapp.sportapp.Model.ConversaDao;
+import com.giovanni.sportapp.sportapp.Model.ConversaDaoFirebase;
 import com.giovanni.sportapp.sportapp.Model.Mensagem;
+import com.giovanni.sportapp.sportapp.Model.MensagemDao;
+import com.giovanni.sportapp.sportapp.Model.MensagemDaoFirebase;
 import com.giovanni.sportapp.sportapp.Model.Usuario;
+import com.giovanni.sportapp.sportapp.Model.UsuarioDao;
+import com.giovanni.sportapp.sportapp.Model.UsuarioDaoFirebase;
 import com.giovanni.sportapp.sportapp.R;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Observable;
+import java.util.Observer;
 import de.hdodenhof.circleimageview.CircleImageView;
 
+public class MensagemActivity extends AppCompatActivity implements Observer {
 
-public class ConversaActivity extends AppCompatActivity {
-
-    private String               idUsuarioLogado;
-    private Usuario              usuarioDestinatario;
-    private TextView             textViewNome;
-    private CircleImageView      imagemPerfil;
-    private FloatingActionButton btnEnviarConversa;
-    private EditText             edtMensagem;
-    private RecyclerView         recyclerViewConversa;
-    private LinearLayoutManager  layoutManager;
-    private MensagensAdapter     adapter;
-    private ArrayList<Mensagem>  listaDeMensagens = new ArrayList<>();
-    private DatabaseReference    bancoDeDados;
-    private DatabaseReference    mensagensReferencia;
-    private ChildEventListener   childEventListenerMensagens;
-    private Toolbar              toolbar;
+    private String                idUsuarioLogado;
+    private Usuario               usuarioDestinatario;
+    private TextView              textViewNome;
+    private CircleImageView       imagemPerfil;
+    private FloatingActionButton  btnEnviarConversa;
+    private EditText              edtMensagem;
+    private RecyclerView          recyclerViewConversa;
+    private LinearLayoutManager   layoutManager;
+    private MensagensAdapter      adapter;
+    private ArrayList<Mensagem>   listaDeMensagens = new ArrayList<>();
+    private Toolbar               toolbar;
+    private MensagemDao           mensagemDao;
+    private ConversaDao           conversaDao;
+    private UsuarioDao            usuarioDao;
+    private static final String USUARIO = "Usuario";
+    private static final String FOMATATO_DATA = "dd/MM/yyyy HH:mm";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_conversa);
+        setContentView(R.layout.activity_mensagem);
+
+        mensagemDao = new MensagemDaoFirebase();
+        conversaDao = new ConversaDaoFirebase();
+        usuarioDao  = new UsuarioDaoFirebase();
+        idUsuarioLogado = usuarioDao.RetornarIdUsuarioLogado();
+
         RecuperarViews();
         ConfigurarToolBar();
         MostrarDadosDoUsuarioDestinatario();
         ConfigurarRecyclerViewMensagens();
         ConfigurarCliqueBotaoEnviarMensagem();
-        idUsuarioLogado = ConfiguradorFireBase.getAutenticadorFireBase().getCurrentUser().getUid();
-        bancoDeDados = ConfiguradorFireBase.getBancoDeDadosFireBase();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
+        mensagemDao.AdicionarObserver(this);
         RecuperarMensagens();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        mensagensReferencia.removeEventListener(childEventListenerMensagens);
+        mensagemDao.RemoverObserver(this);
     }
 
     private void ConfigurarRecyclerViewMensagens(){
@@ -105,7 +114,7 @@ public class ConversaActivity extends AppCompatActivity {
     private void MostrarDadosDoUsuarioDestinatario(){
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
-            usuarioDestinatario = (Usuario) bundle.getSerializable("Usuario");
+            usuarioDestinatario = (Usuario) bundle.getSerializable(USUARIO);
         }
 
         if (usuarioDestinatario != null){
@@ -144,19 +153,13 @@ public class ConversaActivity extends AppCompatActivity {
              msg.setMensagem(edtMensagem.getText().toString());
              msg.setIdUsuarioDestinatario(usuarioDestinatario.getId());
              msg.setMensagemLida(false);
-             SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+             SimpleDateFormat dateFormat = new SimpleDateFormat(FOMATATO_DATA);
              Date data = new Date();
              String DataAtual = dateFormat.format(data);
              msg.setDataEHora(DataAtual);
-             msg.SalvarMensagem();
+             mensagemDao.GravarMensagem(msg);
              GravarConversa(msg);
              edtMensagem.setText("");
-
-             ////Se chegou em 100 mensagens a mensagem mais antiga de todas é excluída para
-             ////que sempre matenha um histórico de no máximo 100 mensagens
-             if (listaDeMensagens.size() >= 100){
-                 msg.RemoverMensagem(listaDeMensagens.get(0).getIdMensagem());
-             }
          }
     }
 
@@ -166,66 +169,19 @@ public class ConversaActivity extends AppCompatActivity {
         conversa.setIdRemetente(idUsuarioLogado);
         conversa.setUltimaMensagem(msg.getMensagem());
         conversa.setUsuarioExibicao(usuarioDestinatario);
-        conversa.SalvarConversa();
+        conversaDao.GravarConversaNoBancoDeDados(conversa,conversa);
     }
 
     private void RecuperarMensagens(){
-        mensagensReferencia = bancoDeDados.child("mensagens")
-                .child(idUsuarioLogado)
-                .child(usuarioDestinatario.getId());
-
-        childEventListenerMensagens = mensagensReferencia.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Mensagem msg = dataSnapshot.getValue(Mensagem.class);
-                if (RetornarIndiceDaMensagemNaLista(msg) == - 1){
-                    listaDeMensagens.add(msg);
-                    adapter.notifyDataSetChanged();
-                    recyclerViewConversa.scrollToPosition(listaDeMensagens.size()-1);
-                }
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                Mensagem msg = dataSnapshot.getValue(Mensagem.class);
-                int PosicaoMensagem = RetornarIndiceDaMensagemNaLista(msg);
-
-                if (PosicaoMensagem != -1){
-                    listaDeMensagens.get(PosicaoMensagem).setMensagemLida(msg.isMensagemLida());
-                    adapter.notifyDataSetChanged();
-                }
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-                Mensagem msg = dataSnapshot.getValue(Mensagem.class);
-                int PosicaoMensagem = RetornarIndiceDaMensagemNaLista(msg);
-
-                if (PosicaoMensagem != -1){
-                    listaDeMensagens.remove(PosicaoMensagem);
-                    adapter.notifyDataSetChanged();
-                }
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
+        mensagemDao.RecuperarMensagens(idUsuarioLogado,usuarioDestinatario.getId());
     }
 
-    private int RetornarIndiceDaMensagemNaLista(Mensagem m){
-        for (int i = 0; i < listaDeMensagens.size(); i++){
-            if (listaDeMensagens.get(i).getIdMensagem().equals(m.getIdMensagem())){
-                return i;
-            }
+    @Override
+    public void update(Observable o, Object arg) {
+        if (arg instanceof ArrayList){
+            listaDeMensagens = (ArrayList) arg;
+            adapter.notifyDataSetChanged();
         }
-        return -1;
-    }
 
+    }
 }

@@ -125,13 +125,17 @@ public class AutenticadorDeUsuarioFirebase extends Observable implements Autenti
     }
 
     @Override
-    public void AddObserver(Observer observer) {
-        addObserver(observer);
+    public void AddObserver(Object observer) {
+        if (observer instanceof Observer){
+            addObserver((Observer) observer);
+        }
     }
 
     @Override
-    public void RemoveObserver(Observer observer) {
-        RemoveObserver(observer);
+    public void RemoverObserver(Object observer) {
+        if (observer instanceof Observer){
+            deleteObserver((Observer) observer);
+        }
     }
 
     @Override

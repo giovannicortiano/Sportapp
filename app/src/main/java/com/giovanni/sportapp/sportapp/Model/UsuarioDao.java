@@ -1,9 +1,5 @@
 package com.giovanni.sportapp.sportapp.Model;
 
-
-import java.io.InputStream;
-import java.util.Observer;
-
 public interface UsuarioDao  {
 
     void ConsultarUsuarioPorId(String id);
@@ -14,13 +10,13 @@ public interface UsuarioDao  {
 
     String RetornarIdUsuarioLogado();
 
-    void AtualizarImagemPerfilUsuario(InputStream imagem, Usuario usuario);
+    void AtualizarImagemPerfilUsuario(Object imagem, Usuario usuario);
 
     void CriarNovoUsuario(Usuario novoUsuario);
 
-    void AddObserver(Observer observer);
+    void AddObserver(Object observer);
 
-    void RemoverObserver(Observer observer);
+    void RemoverObserver(Object observer);
 
     String getMsgSucessoSalvarUsuario();
 }

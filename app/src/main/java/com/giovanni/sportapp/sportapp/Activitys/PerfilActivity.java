@@ -4,20 +4,14 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.giovanni.sportapp.sportapp.Configuracoes.ConfiguradorFireBase;
-import com.giovanni.sportapp.sportapp.Model.Mensagem;
 import com.giovanni.sportapp.sportapp.Model.Usuario;
 import com.giovanni.sportapp.sportapp.R;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -69,7 +63,7 @@ public class PerfilActivity extends AppCompatActivity {
         BtnEnviarMensagem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(PerfilActivity.this, ConversaActivity.class);
+                Intent intent = new Intent(PerfilActivity.this, MensagemActivity.class);
                 intent.putExtra("Usuario",UsuarioPerfil);
                 startActivity(intent);
             }

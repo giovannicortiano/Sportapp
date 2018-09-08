@@ -160,13 +160,18 @@ public class UsuarioDaoFirebase extends Observable implements UsuarioDao {
     }
 
     @Override
-    public void AddObserver(Observer observer) {
-        addObserver(observer);
+    public void AddObserver(Object observer) {
+        if (observer instanceof Observer){
+            addObserver((Observer) observer);
+        }
     }
 
     @Override
-    public void RemoverObserver(Observer observer) {
-        deleteObserver(observer);
+    public void RemoverObserver(Object observer) {
+        if (observer instanceof Observer){
+            deleteObserver((Observer) observer);
+        }
+
         if (countObservers() == 0){
             if ((enventListnerUsuariosPorLocalizacao != null) && (geoQuery != null)){
                 geoQuery.removeGeoQueryEventListener(enventListnerUsuariosPorLocalizacao);
@@ -185,33 +190,37 @@ public class UsuarioDaoFirebase extends Observable implements UsuarioDao {
     }
 
     @Override
-    public void AtualizarImagemPerfilUsuario(InputStream imagem, Usuario usuario) {
-        usuarioInterno = usuario;
-        final StorageReference ImagemPerfilFireBase = referenciaStorage.child(NO_DE_IMAGENS)
-                .child(NO_DE_IMAGENS_PERFIL)
-                .child(usuario.getId() + FORMATO_IMAGEM);
+    public void AtualizarImagemPerfilUsuario(Object imagem, Usuario usuario) {
+        if (imagem instanceof InputStream){
+            InputStream imagemStream = (InputStream) imagem;
 
-        ImagemPerfilFireBase.putStream(imagem).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                ImagemPerfilFireBase.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                    @Override
-                    public void onSuccess(Uri uri) {
-                        usuarioInterno.setFotoUrl(uri.toString());
-                        GravarUsuarioNoBancoDeDados(usuarioInterno,false);
-                        setChanged();
-                        notifyObservers(MSG_SUCESSO_ATUALIZAR_IMAGEM);
-                    }
-                });
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure( Exception e) {
-                setChanged();
-                notifyObservers(MSG_FALHA_ATUALIZAR_IMAGEM);
-                e.printStackTrace();
-            }
-        });
+            usuarioInterno = usuario;
+            final StorageReference ImagemPerfilFireBase = referenciaStorage.child(NO_DE_IMAGENS)
+                    .child(NO_DE_IMAGENS_PERFIL)
+                    .child(usuario.getId() + FORMATO_IMAGEM);
+
+            ImagemPerfilFireBase.putStream(imagemStream).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    ImagemPerfilFireBase.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            usuarioInterno.setFotoUrl(uri.toString());
+                            GravarUsuarioNoBancoDeDados(usuarioInterno,false);
+                            setChanged();
+                            notifyObservers(MSG_SUCESSO_ATUALIZAR_IMAGEM);
+                        }
+                    });
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure( Exception e) {
+                    setChanged();
+                    notifyObservers(MSG_FALHA_ATUALIZAR_IMAGEM);
+                    e.printStackTrace();
+                }
+            });
+        }
     }
 
     @Override

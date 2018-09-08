@@ -50,6 +50,9 @@ dependencies {
 
     ///pesquisa
     compile 'com.miguelcatalan:materialsearchview:1.4.0'
+
+    ///notificação
+    implementation "com.android.support:support-compat:26.1.0"
 }
 
 

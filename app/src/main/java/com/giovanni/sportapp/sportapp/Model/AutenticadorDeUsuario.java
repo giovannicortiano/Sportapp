@@ -1,8 +1,5 @@
 package com.giovanni.sportapp.sportapp.Model;
 
-
-import java.util.Observer;
-
 public interface AutenticadorDeUsuario {
 
     void EnviarEmailDeConfirmacao();
@@ -15,9 +12,9 @@ public interface AutenticadorDeUsuario {
 
     boolean VerificarSeEmailConfirmado();
 
-    void AddObserver(Observer observer);
+    void AddObserver(Object observer);
 
-    void RemoveObserver(Observer observer);
+    void RemoverObserver(Object observer);
 
     String getMsgEmailSenhaSucesso();
 

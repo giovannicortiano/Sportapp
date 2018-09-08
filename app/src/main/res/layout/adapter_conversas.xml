@@ -9,8 +9,8 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/ImagemListaConversa"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
         android:src="@drawable/perfil_padrao" />
 
     <LinearLayout
@@ -24,7 +24,10 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center_vertical"
-            android:padding="10dp"
+            android:paddingBottom="3dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="3dp"
+            android:paddingTop="3dp"
             android:text="Nome"
             android:textStyle="bold" />
 
@@ -33,9 +36,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:padding="10dp"
+            android:paddingBottom="3dp"
             android:paddingLeft="10dp"
+            android:paddingRight="3dp"
+            android:paddingTop="3dp"
             android:text="Última mensagem..." />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"
+            android:background="@android:color/darker_gray"/>
 
     </LinearLayout>
 

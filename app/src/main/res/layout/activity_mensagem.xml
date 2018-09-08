@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.giovanni.sportapp.sportapp.Activitys.ConversaActivity">
+    tools:context="com.giovanni.sportapp.sportapp.Activitys.MensagemActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -46,7 +46,7 @@
 
     <include
         android:id="@+id/include2"
-        layout="@layout/content_conversa" />
+        layout="@layout/content_mensagem" />
 
     <ProgressBar
         android:id="@+id/progressBarCarregandoMensagens"

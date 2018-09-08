@@ -6,8 +6,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.giovanni.sportapp.sportapp.Activitys.ConversaActivity"
-    tools:showIn="@layout/activity_conversa">
+    tools:context="com.giovanni.sportapp.sportapp.Activitys.MensagemActivity"
+    tools:showIn="@layout/activity_mensagem">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/RecyclerViewConversa"

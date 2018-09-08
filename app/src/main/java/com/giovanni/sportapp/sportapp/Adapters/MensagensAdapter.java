@@ -7,11 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import com.giovanni.sportapp.sportapp.Configuracoes.ConfiguradorFireBase;
 import com.giovanni.sportapp.sportapp.Model.Mensagem;
 import com.giovanni.sportapp.sportapp.R;
-
 import java.util.List;
 
 public class MensagensAdapter extends RecyclerView.Adapter<MensagensAdapter.ViewHolder> {

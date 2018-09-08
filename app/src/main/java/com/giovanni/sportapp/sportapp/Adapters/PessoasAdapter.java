@@ -13,9 +13,7 @@ import com.giovanni.sportapp.sportapp.Model.Usuario;
 import com.giovanni.sportapp.sportapp.R;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.maps.android.SphericalUtil;
-
 import java.util.List;
-
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class PessoasAdapter extends RecyclerView.Adapter<PessoasAdapter.ViewHolder>{

@@ -1,47 +1,72 @@
 package com.giovanni.sportapp.sportapp.Fragments;
 
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-
-import com.giovanni.sportapp.sportapp.Activitys.ConversaActivity;
-import com.giovanni.sportapp.sportapp.Activitys.PerfilActivity;
+import com.giovanni.sportapp.sportapp.Activitys.MensagemActivity;
 import com.giovanni.sportapp.sportapp.Adapters.ConversasAdapter;
 import com.giovanni.sportapp.sportapp.Configuracoes.ConfiguradorFireBase;
 import com.giovanni.sportapp.sportapp.Model.Conversa;
-import com.giovanni.sportapp.sportapp.Model.Usuario;
+import com.giovanni.sportapp.sportapp.Model.ConversaDao;
+import com.giovanni.sportapp.sportapp.Model.ConversaDaoFirebase;
 import com.giovanni.sportapp.sportapp.R;
 import com.giovanni.sportapp.sportapp.Utils.RecyclerItemClickListener;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
+public class ConversasFragment extends Fragment implements Observer{
 
-///TODO FALTA FAZER GRAVAR A CONVERSA PARA O DESTINATARIO; POIS SÓ O REMETENTE TA VENDO A CONVERSA
-
-public class ConversasFragment extends Fragment {
-
-    private RecyclerView RecyclerViewListaConversas;
-    private List<Conversa> ListaDeConversas = new ArrayList<>();
+    private RecyclerView     RecyclerViewListaConversas;
+    private ArrayList<Conversa>  ListaDeConversas = new ArrayList<>();
     private ConversasAdapter Adapter;
-    private String IdUsuarioLogado;
-    private DatabaseReference DataBase;
-    private DatabaseReference ConversasRef;
-    private ChildEventListener childEventListenerConversas;
-
+    private String           IdUsuarioLogado;
+    private static final int ID_NOTIFICACAO = 001;
+    private static final String NOME_NOTIFICATION_CHANNEL = "Sportapp";
 
     public ConversasFragment() {
+
+
+    }
+
+    public void MostrarNotificacao(String textoNotificacao){
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(getActivity(), NOME_NOTIFICATION_CHANNEL);
+        builder.setSmallIcon(R.drawable.ic_cadeado_cinza_24dp);
+        builder.setContentTitle("Nova mensagem");
+        builder.setContentText(textoNotificacao);
+        builder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(getActivity());
+        notificationManagerCompat.notify(ID_NOTIFICACAO,builder.build());
+    }
+
+    public void CriarCanalDeNotificacao(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            CharSequence nome = "Notificação Personalizada";
+            String descricao = "Incluí todas as notificações personalizadas";
+            int importancia = NotificationManager.IMPORTANCE_DEFAULT;
+
+            NotificationChannel notificationChannel = new NotificationChannel(NOME_NOTIFICATION_CHANNEL,nome,importancia);
+            notificationChannel.setDescription(descricao);
+
+            NotificationManager notificationManager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.createNotificationChannel(notificationChannel);
+        }
     }
 
 
@@ -61,14 +86,15 @@ public class ConversasFragment extends Fragment {
         RecyclerViewListaConversas.setAdapter(Adapter);
 
         IdUsuarioLogado = ConfiguradorFireBase.getAutenticadorFireBase().getCurrentUser().getUid();
-        DataBase = ConfiguradorFireBase.getBancoDeDadosFireBase();
-        ConversasRef =  DataBase.child("conversas").child(IdUsuarioLogado);
+        ConversaDao conversaDao = new ConversaDaoFirebase();
+        conversaDao.AdicionarObserver(this);
+        conversaDao.ListarConversasDoUsuario(IdUsuarioLogado);
 
         RecyclerViewListaConversas.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), RecyclerViewListaConversas, new RecyclerItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 Conversa ConversaClicada  = ListaDeConversas.get(position);
-                Intent intent = new Intent(getActivity(), ConversaActivity.class);
+                Intent intent = new Intent(getActivity(), MensagemActivity.class);
                 intent.putExtra("Usuario",ConversaClicada.getUsuarioExibicao());
                 startActivity(intent);
             }
@@ -84,55 +110,24 @@ public class ConversasFragment extends Fragment {
             }
         }));
 
+        ///CriarCanalDeNotificacao();
+
         return view;
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        RecuperarConversas();
+    public void update(Observable o, Object arg) {
+        if (o instanceof ConversaDaoFirebase){
+            if (arg instanceof ArrayList){
+                ArrayList<Conversa> lista = (ArrayList<Conversa>) arg;
+                ListaDeConversas.clear();
+                for (Conversa c : lista){
+                    ListaDeConversas.add(c);
+                   /// MostrarNotificacao(c.getUltimaMensagem());
+                }
+
+                Adapter.notifyDataSetChanged();
+            }
+        }
     }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        ConversasRef.removeEventListener(childEventListenerConversas);
-    }
-
-    public void RecuperarConversas(){
-
-
-        childEventListenerConversas = ConversasRef.addChildEventListener(new ChildEventListener() {
-           @Override
-           public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-               Conversa conversa  = dataSnapshot.getValue(Conversa.class);
-               ListaDeConversas.add(conversa);
-               Adapter.notifyDataSetChanged();
-           }
-
-           @Override
-           public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-           }
-
-           @Override
-           public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-           }
-
-           @Override
-           public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-           }
-
-           @Override
-           public void onCancelled(DatabaseError databaseError) {
-
-           }
-       });
-
-
-
-    }
-
 }

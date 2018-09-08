@@ -51,7 +51,7 @@
                 android:value="com.giovanni.sportapp.sportapp.Activitys.MainActivity" />
         </activity>
         <activity
-            android:name=".Activitys.ConversaActivity"
+            android:name=".Activitys.MensagemActivity"
             android:label="@string/title_activity_conversa"
             android:parentActivityName=".Activitys.MainActivity"
             android:theme="@style/AppTheme">

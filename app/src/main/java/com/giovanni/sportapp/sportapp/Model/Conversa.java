@@ -1,15 +1,20 @@
 package com.giovanni.sportapp.sportapp.Model;
 
-
-import com.giovanni.sportapp.sportapp.Configuracoes.ConfiguradorFireBase;
-import com.google.firebase.database.DatabaseReference;
-
 public class Conversa {
 
     private String IdRemetente;
     private String IdDestinatario;
     private String UltimaMensagem;
+    private boolean mensagemNova;
     private Usuario usuarioExibicao;
+
+    public boolean isMensagemNova() {
+        return mensagemNova;
+    }
+
+    public void setMensagemNova(boolean mensagemNova) {
+        this.mensagemNova = mensagemNova;
+    }
 
     public Conversa() {
     }
@@ -44,15 +49,5 @@ public class Conversa {
 
     public void setUsuarioExibicao(Usuario usuario) {
         this.usuarioExibicao = usuario;
-    }
-
-    public void SalvarConversa(){
-        DatabaseReference BancoDeDados = ConfiguradorFireBase.getBancoDeDadosFireBase();
-        DatabaseReference MensagemReferencia = BancoDeDados.child("conversas");
-
-        MensagemReferencia.child(this.getIdRemetente()).child(this.getIdDestinatario()).setValue(this);
-
-        // MensagemReferencia = BancoDeDados.child("mensagens");
-        ///MensagemReferencia.child(this.getIdDestinatario()).child(this.getIdRemetente()).setValue(this);
     }
 }
