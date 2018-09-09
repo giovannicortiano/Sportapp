@@ -21,7 +21,7 @@
         <TextView
             android:id="@+id/TextNomeListaPessoa"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="30dp"
             android:layout_weight="1"
             android:gravity="center_vertical"
             android:paddingBottom="3dp"
@@ -35,7 +35,7 @@
         <TextView
             android:id="@+id/TextEsportesListaPessoa"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="20dp"
             android:layout_weight="0"
             android:hint="Esporte não informado"
             android:paddingLeft="10dp"

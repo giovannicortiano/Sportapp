@@ -5,16 +5,7 @@ public class Conversa {
     private String IdRemetente;
     private String IdDestinatario;
     private String UltimaMensagem;
-    private boolean mensagemNova;
     private Usuario usuarioExibicao;
-
-    public boolean isMensagemNova() {
-        return mensagemNova;
-    }
-
-    public void setMensagemNova(boolean mensagemNova) {
-        this.mensagemNova = mensagemNova;
-    }
 
     public Conversa() {
     }

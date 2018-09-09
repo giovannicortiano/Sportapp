@@ -23,6 +23,7 @@ import com.giovanni.sportapp.sportapp.Configuracoes.ConfiguradorFireBase;
 import com.giovanni.sportapp.sportapp.Model.Conversa;
 import com.giovanni.sportapp.sportapp.Model.ConversaDao;
 import com.giovanni.sportapp.sportapp.Model.ConversaDaoFirebase;
+import com.giovanni.sportapp.sportapp.Model.Mensagem;
 import com.giovanni.sportapp.sportapp.R;
 import com.giovanni.sportapp.sportapp.Utils.RecyclerItemClickListener;
 import java.util.ArrayList;
@@ -38,10 +39,9 @@ public class ConversasFragment extends Fragment implements Observer{
     private String           IdUsuarioLogado;
     private static final int ID_NOTIFICACAO = 001;
     private static final String NOME_NOTIFICATION_CHANNEL = "Sportapp";
+    private static final String USUARIO = "Usuario";
 
     public ConversasFragment() {
-
-
     }
 
     public void MostrarNotificacao(String textoNotificacao){
@@ -86,7 +86,7 @@ public class ConversasFragment extends Fragment implements Observer{
         RecyclerViewListaConversas.setAdapter(Adapter);
 
         IdUsuarioLogado = ConfiguradorFireBase.getAutenticadorFireBase().getCurrentUser().getUid();
-        ConversaDao conversaDao = new ConversaDaoFirebase();
+        ConversaDao conversaDao = new ConversaDaoFirebase(ListaDeConversas);
         conversaDao.AdicionarObserver(this);
         conversaDao.ListarConversasDoUsuario(IdUsuarioLogado);
 
@@ -95,7 +95,7 @@ public class ConversasFragment extends Fragment implements Observer{
             public void onItemClick(View view, int position) {
                 Conversa ConversaClicada  = ListaDeConversas.get(position);
                 Intent intent = new Intent(getActivity(), MensagemActivity.class);
-                intent.putExtra("Usuario",ConversaClicada.getUsuarioExibicao());
+                intent.putExtra(USUARIO,ConversaClicada.getUsuarioExibicao());
                 startActivity(intent);
             }
 
@@ -118,16 +118,14 @@ public class ConversasFragment extends Fragment implements Observer{
     @Override
     public void update(Observable o, Object arg) {
         if (o instanceof ConversaDaoFirebase){
-            if (arg instanceof ArrayList){
-                ArrayList<Conversa> lista = (ArrayList<Conversa>) arg;
-                ListaDeConversas.clear();
-                for (Conversa c : lista){
-                    ListaDeConversas.add(c);
-                   /// MostrarNotificacao(c.getUltimaMensagem());
-                }
-
+            if (arg instanceof Conversa){
                 Adapter.notifyDataSetChanged();
             }
         }
     }
+
+
+
+
+
 }

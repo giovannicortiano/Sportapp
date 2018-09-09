@@ -33,6 +33,7 @@ public class MensagemActivity extends AppCompatActivity implements Observer {
 
     private String                idUsuarioLogado;
     private Usuario               usuarioDestinatario;
+    private Usuario               usuarioLogado;
     private TextView              textViewNome;
     private CircleImageView       imagemPerfil;
     private FloatingActionButton  btnEnviarConversa;
@@ -45,18 +46,20 @@ public class MensagemActivity extends AppCompatActivity implements Observer {
     private MensagemDao           mensagemDao;
     private ConversaDao           conversaDao;
     private UsuarioDao            usuarioDao;
-    private static final String USUARIO = "Usuario";
-    private static final String FOMATATO_DATA = "dd/MM/yyyy HH:mm";
+    private static final String   USUARIO = "Usuario";
+    private static final String   FOMATATO_DATA = "dd/MM/yyyy HH:mm";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mensagem);
 
-        mensagemDao = new MensagemDaoFirebase();
+        mensagemDao = new MensagemDaoFirebase(listaDeMensagens);
         conversaDao = new ConversaDaoFirebase();
         usuarioDao  = new UsuarioDaoFirebase();
         idUsuarioLogado = usuarioDao.RetornarIdUsuarioLogado();
+        usuarioDao.AddObserver(this);
+        usuarioDao.ConsultarUsuarioPorId(idUsuarioLogado);
 
         RecuperarViews();
         ConfigurarToolBar();
@@ -147,9 +150,9 @@ public class MensagemActivity extends AppCompatActivity implements Observer {
 
 
     private void EnviarMensagem(){
-         if (! edtMensagem.getText().toString().isEmpty()) {
+         if ((! edtMensagem.getText().toString().isEmpty()) && (usuarioLogado != null)) {
              Mensagem msg = new Mensagem();
-             msg.setIdUsuarioRemetente(idUsuarioLogado);
+             msg.setIdUsuarioRemetente(usuarioLogado.getId());
              msg.setMensagem(edtMensagem.getText().toString());
              msg.setIdUsuarioDestinatario(usuarioDestinatario.getId());
              msg.setMensagemLida(false);
@@ -164,23 +167,33 @@ public class MensagemActivity extends AppCompatActivity implements Observer {
     }
 
     private void GravarConversa(Mensagem msg){
-        Conversa conversa = new Conversa();
-        conversa.setIdDestinatario(usuarioDestinatario.getId());
-        conversa.setIdRemetente(idUsuarioLogado);
-        conversa.setUltimaMensagem(msg.getMensagem());
-        conversa.setUsuarioExibicao(usuarioDestinatario);
-        conversaDao.GravarConversaNoBancoDeDados(conversa,conversa);
+        Conversa conversaRemetente = new Conversa();
+        conversaRemetente.setIdDestinatario(usuarioDestinatario.getId());
+        conversaRemetente.setIdRemetente(usuarioLogado.getId());
+        conversaRemetente.setUltimaMensagem(msg.getMensagem());
+        conversaRemetente.setUsuarioExibicao(usuarioDestinatario);
+
+        Conversa conversaDestinatario = new Conversa();
+        conversaDestinatario.setIdDestinatario(usuarioLogado.getId());
+        conversaDestinatario.setIdRemetente(usuarioDestinatario.getId());
+        conversaDestinatario.setUltimaMensagem(msg.getMensagem());
+        conversaDestinatario.setUsuarioExibicao(usuarioLogado);
+
+        conversaDao.GravarConversaNoBancoDeDados(conversaRemetente,conversaDestinatario);
     }
 
     private void RecuperarMensagens(){
-        mensagemDao.RecuperarMensagens(idUsuarioLogado,usuarioDestinatario.getId());
+        mensagemDao.RecuperarMensagens(idUsuarioLogado, usuarioDestinatario.getId());
     }
 
     @Override
     public void update(Observable o, Object arg) {
-        if (arg instanceof ArrayList){
-            listaDeMensagens = (ArrayList) arg;
+        if (arg instanceof Mensagem){
             adapter.notifyDataSetChanged();
+            recyclerViewConversa.scrollToPosition(listaDeMensagens.size()-1);
+        }
+        else if (arg instanceof Usuario){
+            usuarioLogado = (Usuario) arg;
         }
 
     }

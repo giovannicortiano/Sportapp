@@ -1,6 +1,8 @@
 package com.giovanni.sportapp.sportapp.Model;
 
 
+import java.util.ArrayList;
+
 public interface MensagemDao {
 
     void RecuperarMensagens(String idUsuarioLogado, String IdUsuarioDestinatario);

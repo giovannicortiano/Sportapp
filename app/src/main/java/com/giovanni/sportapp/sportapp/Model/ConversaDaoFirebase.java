@@ -17,9 +17,11 @@ public class ConversaDaoFirebase extends Observable implements ConversaDao {
     private DatabaseReference conversasRef;
     private ArrayList<Conversa> listaDeConversaInterna;
 
-    public ConversaDaoFirebase() {
-        listaDeConversaInterna = new ArrayList<Conversa>();
+    public ConversaDaoFirebase(ArrayList l) {
+        listaDeConversaInterna = l;
     }
+
+    public ConversaDaoFirebase(){listaDeConversaInterna = new ArrayList<Conversa>();}
 
     @Override
     public void ListarConversasDoUsuario(String idUsuario) {
@@ -31,10 +33,7 @@ public class ConversaDaoFirebase extends Observable implements ConversaDao {
                 if (RetornarIndiceDaConversaoNaLista(conversa) == -1){
                     listaDeConversaInterna.add(conversa);
                     setChanged();
-                    notifyObservers(listaDeConversaInterna);
-                    if (conversa.isMensagemNova()){
-                        notifyObservers(conversa);
-                    }
+                    notifyObservers(conversa);
                 }
             }
 
@@ -45,10 +44,7 @@ public class ConversaDaoFirebase extends Observable implements ConversaDao {
                 if (indiceMensagem != -1){
                     listaDeConversaInterna.set(indiceMensagem,conversa);
                     setChanged();
-                    notifyObservers(listaDeConversaInterna);
-                    if (conversa.isMensagemNova()){
-                        notifyObservers(conversa);
-                    }
+                    notifyObservers(conversa);
                 }
             }
 
@@ -59,7 +55,7 @@ public class ConversaDaoFirebase extends Observable implements ConversaDao {
                 if (indiceMensagem != -1){
                     listaDeConversaInterna.remove(indiceMensagem);
                     setChanged();
-                    notifyObservers(listaDeConversaInterna);
+                    notifyObservers(conversa);
                 }
             }
 
@@ -79,13 +75,11 @@ public class ConversaDaoFirebase extends Observable implements ConversaDao {
     @Override
     public void GravarConversaNoBancoDeDados(Conversa conversaRemetente, Conversa conversaDestinatario) {
         DatabaseReference BancoDeDados = ConfiguradorFireBase.getBancoDeDadosFireBase();
-        conversaRemetente.setMensagemNova(false);
         DatabaseReference MensagemReferencia = BancoDeDados.child(NO_DE_CONVERSAS);
         MensagemReferencia.child(conversaRemetente.getIdRemetente()).child(conversaRemetente.getIdDestinatario()).setValue(conversaRemetente);
 
-        conversaDestinatario.setMensagemNova(true);
         MensagemReferencia = BancoDeDados.child(NO_DE_CONVERSAS);
-        MensagemReferencia.child(conversaDestinatario.getIdDestinatario()).child(conversaDestinatario.getIdRemetente()).setValue(conversaDestinatario);
+        MensagemReferencia.child(conversaDestinatario.getIdRemetente()).child(conversaDestinatario.getIdDestinatario()).setValue(conversaDestinatario);
     }
 
     @Override
@@ -115,10 +109,6 @@ public class ConversaDaoFirebase extends Observable implements ConversaDao {
             }
         }
         return -1;
-    }
-
-    private void AtualizarConversa(Conversa conversa){
-
     }
 
 }

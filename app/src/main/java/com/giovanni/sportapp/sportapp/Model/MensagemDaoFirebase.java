@@ -14,7 +14,14 @@ public class MensagemDaoFirebase extends Observable implements MensagemDao{
     private DatabaseReference bancoDeDados;
     private ChildEventListener childEventListenerMensagens;
     private final static String NO_DE_MENSAGENS = "mensagens";
-    private ArrayList<Mensagem> listaDeMensagens = new ArrayList<>();
+    private ArrayList<Mensagem> listaDeMensagens;
+
+
+    public MensagemDaoFirebase(ArrayList l) {
+        listaDeMensagens = l;
+    }
+
+    public MensagemDaoFirebase(){listaDeMensagens = new ArrayList<>();}
 
     @Override
     public void RecuperarMensagens(String idUsuarioLogado, String IdUsuarioDestinatario) {
@@ -30,8 +37,9 @@ public class MensagemDaoFirebase extends Observable implements MensagemDao{
                 if (RetornarIndiceDaMensagemNaLista(msg) == - 1){
                     listaDeMensagens.add(msg);
                     setChanged();
-                    notifyObservers();
+                    notifyObservers(msg);
                 }
+
             }
 
             @Override
@@ -41,7 +49,7 @@ public class MensagemDaoFirebase extends Observable implements MensagemDao{
 
                 if (PosicaoMensagem != -1){
                     setChanged();
-                    notifyObservers();
+                    notifyObservers(msg);
                 }
             }
 
@@ -52,7 +60,7 @@ public class MensagemDaoFirebase extends Observable implements MensagemDao{
 
                 if (PosicaoMensagem != -1){
                     setChanged();
-                    notifyObservers();
+                    notifyObservers(msg);
                 }
             }
 

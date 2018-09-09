@@ -45,6 +45,8 @@ public class PessoasFragment extends Fragment implements Observer {
     private CaptorDeLocalizacao captorDeLocalizacao;
     private String              idUsuarioLogado;
     private boolean             atualizarLocalizacao;
+    private static final String OK = "OK";
+    private static final String USUARIO = "Usuario";
 
     private String[] PermissoesNecesssarias = new String[]{
             Manifest.permission.ACCESS_FINE_LOCATION,
@@ -211,7 +213,7 @@ public class PessoasFragment extends Fragment implements Observer {
         builder.setTitle(R.string.PermissoesNegadas);
         builder.setMessage(R.string.ParaUsarOSportappPrecisaPermissao);
         builder.setCancelable(false);
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(OK, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
             }
@@ -230,7 +232,7 @@ public class PessoasFragment extends Fragment implements Observer {
             public void onItemClick(View view, int position) {
                 Usuario usuarioClicado = listaDePessoas.get(position);
                 Intent intent = new Intent(getActivity(), PerfilActivity.class);
-                intent.putExtra("Usuario",usuarioClicado);
+                intent.putExtra(USUARIO,usuarioClicado);
                 startActivity(intent);
             }
 
