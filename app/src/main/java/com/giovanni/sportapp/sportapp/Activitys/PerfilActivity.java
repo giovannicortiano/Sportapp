@@ -3,15 +3,18 @@ package com.giovanni.sportapp.sportapp.Activitys;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
-
 import com.bumptech.glide.Glide;
 import com.giovanni.sportapp.sportapp.Model.Usuario;
 import com.giovanni.sportapp.sportapp.R;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.maps.android.SphericalUtil;
+
+import org.w3c.dom.Text;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -21,14 +24,27 @@ public class PerfilActivity extends AppCompatActivity {
     private TextView TextViewEsportes;
     private TextView TextViewSobre;
     private CircleImageView ImagemPerfil;
-    private FloatingActionButton BtnEnviarMensagem;
+    private ImageButton BtnEnviarMensagem;
+    private static final String PERFIL = "Perfil";
+    private static final String USUARIO = "Usuario";
+    private TextView TextViewDistanciaPerfil;
+    private static final String APROX = "Aprox.";
+    private static final String KM = "KM";
+    private static final String MENOS_DE_UM_KM = "Menos de 1KM";
+    private LatLng posicaoUsuarioLogado;
+    private double LatitudeUsuarioLogado;
+    private double LongitudeUsuarioLogado;
+    private static final String LATITUDE_USUARIO_LOGADO = "LatitudeUsuarioLogado";
+    private static final String LONGITUDE_USUARIO_LOGADO = "LongitudeUsuarioLogado";
+    private static final String DISTANCIA_INDISPONIVEL = "Distância indisponível";
 
     private void RecuperarViews(){
         TextViewNome = findViewById(R.id.textNomeTelaPerfil);
         TextViewEsportes = findViewById(R.id.TextEsportesPerfil);
         TextViewSobre = findViewById(R.id.TextSobrePerfil);
         ImagemPerfil = findViewById(R.id.imagemTelaPerfil);
-        BtnEnviarMensagem = findViewById(R.id.btnEnviarMensagem);
+        BtnEnviarMensagem = findViewById(R.id.BtnEnviarMensagem);
+        TextViewDistanciaPerfil = findViewById(R.id.textDistanciaPerfil);
     }
 
     @Override
@@ -36,17 +52,33 @@ public class PerfilActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_perfil);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolBarPrincipal);
-        toolbar.setTitle("Perfil");
+        toolbar.setTitle(PERFIL);
         setSupportActionBar(toolbar);
-
-
         RecuperarViews();
 
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
-            UsuarioPerfil = (Usuario) bundle.getSerializable("Usuario");
+            UsuarioPerfil = (Usuario) bundle.getSerializable(USUARIO);
+            LatitudeUsuarioLogado = (double) bundle.getSerializable(LATITUDE_USUARIO_LOGADO);
+            LongitudeUsuarioLogado = (double) bundle.getSerializable(LONGITUDE_USUARIO_LOGADO);
+            posicaoUsuarioLogado = new LatLng(LatitudeUsuarioLogado,LongitudeUsuarioLogado);
+            PreencherDadosUsuarioPerfil();
         }
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        BtnEnviarMensagem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(PerfilActivity.this, MensagemActivity.class);
+                intent.putExtra(USUARIO,UsuarioPerfil);
+                startActivity(intent);
+            }
+        });
+
+    }
+
+    private void PreencherDadosUsuarioPerfil(){
         TextViewNome.setText(UsuarioPerfil.getNome());
         TextViewEsportes.setText(UsuarioPerfil.getEsportes());
         TextViewSobre.setText(UsuarioPerfil.getSobre());
@@ -58,17 +90,21 @@ public class PerfilActivity extends AppCompatActivity {
         else{
             ImagemPerfil.setImageResource(R.drawable.perfil_padrao);
         }
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        BtnEnviarMensagem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(PerfilActivity.this, MensagemActivity.class);
-                intent.putExtra("Usuario",UsuarioPerfil);
-                startActivity(intent);
+        if (UsuarioPerfil.getL() != null && posicaoUsuarioLogado != null){
+            LatLng posicaoUsuarioLista = new LatLng(UsuarioPerfil.getL().get(0),UsuarioPerfil.getL().get(1));
+            double distancia = SphericalUtil.computeDistanceBetween(posicaoUsuarioLogado,posicaoUsuarioLista);
+            int km  = (int) distancia / 1000;
+            if (km > 0) {
+                TextViewDistanciaPerfil.setText(APROX + " " + String.valueOf(km) + KM);
             }
-        });
-
+            else{
+                TextViewDistanciaPerfil.setText(MENOS_DE_UM_KM);
+            }
+        }
+        else{
+            TextViewDistanciaPerfil.setText(DISTANCIA_INDISPONIVEL);
+        }
     }
 
 }

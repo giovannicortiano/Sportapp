@@ -26,6 +26,8 @@ import com.giovanni.sportapp.sportapp.R;
 import com.giovanni.sportapp.sportapp.Utils.CaptorDeLocalizacao;
 import com.giovanni.sportapp.sportapp.Utils.RecyclerItemClickListener;
 import com.giovanni.sportapp.sportapp.Utils.ValidadorDePermissao;
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Observable;
@@ -47,6 +49,8 @@ public class PessoasFragment extends Fragment implements Observer {
     private boolean             atualizarLocalizacao;
     private static final String OK = "OK";
     private static final String USUARIO = "Usuario";
+    private static final String LATITUDE_USUARIO_LOGADO = "LatitudeUsuarioLogado";
+    private static final String LONGITUDE_USUARIO_LOGADO = "LongitudeUsuarioLogado";
 
     private String[] PermissoesNecesssarias = new String[]{
             Manifest.permission.ACCESS_FINE_LOCATION,
@@ -233,6 +237,10 @@ public class PessoasFragment extends Fragment implements Observer {
                 Usuario usuarioClicado = listaDePessoas.get(position);
                 Intent intent = new Intent(getActivity(), PerfilActivity.class);
                 intent.putExtra(USUARIO,usuarioClicado);
+                if (usuarioLogado != null && usuarioLogado.getL() != null) {
+                    intent.putExtra(LATITUDE_USUARIO_LOGADO, usuarioLogado.getL().get(0));
+                    intent.putExtra(LONGITUDE_USUARIO_LOGADO, usuarioLogado.getL().get(1));
+                }
                 startActivity(intent);
             }
 
