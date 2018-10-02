@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.bumptech.glide.Glide;
@@ -53,6 +54,13 @@ public class ConfiguracoesActivity extends AppCompatActivity implements Observer
     private static final int SELECECAO_GALERIA = 200;
     private Usuario usuarioLogado;
     private UsuarioDao usuarioDaoFireBase;
+    private SeekBar seekBarRaioKm;
+    private TextView textViewDistanciaMaxima;
+    private static final String FRASE_DISTANCIA_MAXIMA = "Distância Máxima";
+    private static final String KM = "KM";
+    private static final String OK = "OK";
+    private static final String FOTO_PERFIL_SPORTAPP = "foto_perfil_sportapp";
+    private static final String FOTO_DA_CAMERA = "Foto da Câmera";
 
 
     private String[] PermissoesNecesssarias = new String[]{
@@ -85,6 +93,23 @@ public class ConfiguracoesActivity extends AppCompatActivity implements Observer
         ConfigurarBtnCameraClick();
         ConfigurarBtnGaleriaFotoClick();
         ConfigurarBtnAtualizarDadosClick();
+
+        seekBarRaioKm.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                textViewDistanciaMaxima.setText(FRASE_DISTANCIA_MAXIMA + " "  + Integer.toString(progress) + KM);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
     }
 
     @Override
@@ -162,6 +187,12 @@ public class ConfiguracoesActivity extends AppCompatActivity implements Observer
         EdtNome.setText(usuarioLogado.getNome());
         EdtSobre.setText(usuarioLogado.getSobre());
         EdtEsportes.setText(usuarioLogado.getEsportes());
+        if (usuarioLogado.getRaioDeKm() != 0){
+            seekBarRaioKm.setProgress((int) usuarioLogado.getRaioDeKm());
+        }
+        else{
+            seekBarRaioKm.setProgress(1);
+        }
     }
 
     public void RecuperarViews(){
@@ -179,6 +210,8 @@ public class ConfiguracoesActivity extends AppCompatActivity implements Observer
         TextViewDescricaoConfig = findViewById(R.id.TextSobreConfig);
         TextViewEsportesConfig = findViewById(R.id.TextEsportesConfig);
         ToolBarConfiguracoes = findViewById(R.id.toolBarPrincipal);
+        seekBarRaioKm = findViewById(R.id.seekBarRaioDeKm);
+        textViewDistanciaMaxima = findViewById(R.id.textDistanciaMaxima);
     }
 
     public void ConfigurarBtnCameraClick(){
@@ -186,8 +219,8 @@ public class ConfiguracoesActivity extends AppCompatActivity implements Observer
             @Override
             public void onClick(View v) {
                 ContentValues parametroParaCapturaDeFotoDaCamera = new ContentValues();
-                parametroParaCapturaDeFotoDaCamera.put(MediaStore.Images.Media.TITLE, "foto_perfil_sportapp");
-                parametroParaCapturaDeFotoDaCamera.put(MediaStore.Images.Media.DESCRIPTION, "Foto da Câmera");
+                parametroParaCapturaDeFotoDaCamera.put(MediaStore.Images.Media.TITLE, FOTO_PERFIL_SPORTAPP);
+                parametroParaCapturaDeFotoDaCamera.put(MediaStore.Images.Media.DESCRIPTION, FOTO_DA_CAMERA);
                 LocalFotoPerfil = getContentResolver().insert(
                         MediaStore.Images.Media.EXTERNAL_CONTENT_URI, parametroParaCapturaDeFotoDaCamera);
 
@@ -216,7 +249,7 @@ public class ConfiguracoesActivity extends AppCompatActivity implements Observer
         builder.setTitle(R.string.PermissoesNegadas);
         builder.setMessage(R.string.ParaUsarOSportappPrecisaPermissao);
         builder.setCancelable(false);
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(OK, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 finish();
@@ -278,8 +311,10 @@ public class ConfiguracoesActivity extends AppCompatActivity implements Observer
         usuarioLogado.setNome(EdtNome.getText().toString());
         usuarioLogado.setSobre(EdtSobre.getText().toString());
         usuarioLogado.setEsportes(EdtEsportes.getText().toString());
+        usuarioLogado.setRaioDeKm(seekBarRaioKm.getProgress());
         ProgressBarConfig.setVisibility(View.VISIBLE);
         usuarioDaoFireBase.GravarUsuarioNoBancoDeDados(usuarioLogado,true);
+
     }
 
 }

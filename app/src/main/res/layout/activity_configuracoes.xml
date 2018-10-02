@@ -15,7 +15,6 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"></include>
 
@@ -27,16 +26,29 @@
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/include"
-        app:layout_constraintVertical_bias="1.0">
+        app:layout_constraintTop_toBottomOf="@+id/include">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/colorBackGround"
             android:scrollbars="vertical">
+
+            <ProgressBar
+                android:id="@+id/progressBarConfig"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/ImagemPerfil"
@@ -48,10 +60,24 @@
                 android:src="@drawable/perfil_padrao"
                 app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_chainStyle="packed" />
+
+            <ProgressBar
+                android:id="@+id/progressBarImagem"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
+                app:layout_constraintEnd_toEndOf="@+id/ImagemPerfil"
+                app:layout_constraintStart_toStartOf="@+id/ImagemPerfil"
+                app:layout_constraintTop_toTopOf="@+id/ImagemPerfil" />
 
             <EditText
                 android:id="@+id/edtSobreConfig"
@@ -69,9 +95,8 @@
                 android:paddingRight="16dp"
                 android:paddingTop="8dp"
                 android:textColor="@color/colorTextDarkGrey"
-                app:layout_constraintBottom_toTopOf="@+id/TextEsportesConfig"
+                app:layout_constraintBottom_toTopOf="@+id/textDistanciaMaxima"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/TextSobreConfig" />
 
@@ -91,9 +116,8 @@
                 android:paddingRight="16dp"
                 android:paddingTop="8dp"
                 android:textColor="@color/colorTextDarkGrey"
-                app:layout_constraintBottom_toTopOf="@+id/btnAtualizarConfig"
+                app:layout_constraintBottom_toTopOf="@+id/TextSobreConfig"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/TextEsportesConfig" />
 
@@ -103,15 +127,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="8dp"
                 android:background="@drawable/fundo_botao_arredondado"
                 android:text="@string/Atualizar"
                 android:textColor="@color/colorTextWhite"
                 app:layout_constraintBottom_toTopOf="@+id/textViewApagarConta"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/edtEsportesConfig" />
+                app:layout_constraintTop_toBottomOf="@+id/seekBarRaioDeKm" />
 
             <TextView
                 android:id="@+id/textViewApagarConta"
@@ -120,14 +143,13 @@
                 android:layout_marginBottom="4dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="8dp"
                 android:text="@string/ApagarConta"
                 android:textAlignment="center"
                 android:textColor="@color/colorLighter"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/btnAtualizarConfig" />
 
@@ -137,9 +159,10 @@
                 android:layout_height="60dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
+                android:layout_marginTop="2dp"
                 app:layout_constraintBottom_toTopOf="@+id/textDescricaoNomeConfig"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/ImagemPerfil">
 
@@ -147,7 +170,6 @@
                     android:id="@+id/btnGaleria"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
-                    android:layout_marginStart="2dp"
                     android:layout_weight="1"
                     android:background="@drawable/fundo_circulo_color_primary"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -155,13 +177,13 @@
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toEndOf="@+id/btnCamera"
                     app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.0"
                     app:srcCompat="@drawable/ic_insert_photo_cinza_24dp" />
 
                 <ImageButton
                     android:id="@+id/btnCamera"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
-                    android:layout_marginEnd="2dp"
                     android:layout_weight="1"
                     android:background="@drawable/fundo_circulo_color_primary"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -170,26 +192,28 @@
                     app:layout_constraintHorizontal_chainStyle="packed"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="1.0"
                     app:srcCompat="@drawable/ic_photo_camera_cinza_24dp" />
             </android.support.constraint.ConstraintLayout>
 
             <EditText
                 android:id="@+id/edtNomeConfig"
                 android:layout_width="0dp"
-                android:layout_height="50dp"
+                android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
                 android:background="@drawable/fundo_caixa_texto_arredondada"
                 android:ems="10"
                 android:hint="@string/DigiteNome"
                 android:inputType="textPersonName"
+                android:minHeight="50dp"
                 android:paddingBottom="8dp"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
                 android:paddingTop="8dp"
                 android:singleLine="false"
                 android:textColor="@color/colorTextDarkGrey"
-                app:layout_constraintBottom_toTopOf="@+id/TextSobreConfig"
+                app:layout_constraintBottom_toTopOf="@+id/TextEsportesConfig"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textDescricaoNomeConfig" />
@@ -200,13 +224,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="8dp"
                 android:paddingLeft="16dp"
                 android:text="@string/DigiteNome"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@+id/edtNomeConfig"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
 
@@ -216,15 +239,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="8dp"
                 android:paddingLeft="16dp"
                 android:text="@string/SobreVoce"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@+id/edtSobreConfig"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/edtNomeConfig" />
+                app:layout_constraintTop_toBottomOf="@+id/edtEsportesConfig" />
 
             <TextView
                 android:id="@+id/TextEsportesConfig"
@@ -232,46 +254,46 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="8dp"
                 android:paddingLeft="16dp"
                 android:text="@string/SeusEsportes"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@+id/edtEsportesConfig"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/edtSobreConfig" />
+                app:layout_constraintTop_toBottomOf="@+id/edtNomeConfig" />
 
-            <ProgressBar
-                android:id="@+id/progressBarConfig"
-                style="?android:attr/progressBarStyle"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_marginBottom="224dp"
+            <SeekBar
+                android:id="@+id/seekBarRaioDeKm"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:visibility="invisible"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:background="@drawable/fundo_caixa_texto_arredondada"
+                android:max="51"
+                android:min="1"
+                android:minHeight="50dp"
+                android:paddingLeft="16dp"
+                android:progress="1"
+                app:layout_constraintBottom_toTopOf="@+id/btnAtualizarConfig"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.51" />
+                app:layout_constraintTop_toBottomOf="@+id/textDistanciaMaxima" />
 
-            <ProgressBar
-                android:id="@+id/progressBarImagem"
-                style="?android:attr/progressBarStyle"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_marginBottom="8dp"
+            <TextView
+                android:id="@+id/textDistanciaMaxima"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:visibility="invisible"
-                app:layout_constraintBottom_toBottomOf="@+id/ImagemPerfil"
-                app:layout_constraintEnd_toEndOf="@+id/ImagemPerfil"
-                app:layout_constraintStart_toStartOf="@+id/ImagemPerfil"
-                app:layout_constraintTop_toTopOf="@+id/ImagemPerfil" />
+                android:paddingLeft="16dp"
+                android:text="Distância Máxima"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/seekBarRaioDeKm"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/edtSobreConfig" />
 
 
         </android.support.constraint.ConstraintLayout>
