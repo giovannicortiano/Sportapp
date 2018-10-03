@@ -43,6 +43,7 @@
     <string name="title_activity_perfil">PerfilActivity</string>
     <string name="SeusEsportes">Seus Esportes</string>
     <string name="title_activity_conversa">ConversaActivity</string>
+    <string name="perfil">Perfil</string>
 
 
 </resources>

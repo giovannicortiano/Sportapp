@@ -51,6 +51,7 @@ public class PessoasFragment extends Fragment implements Observer {
     private static final String USUARIO = "Usuario";
     private static final String LATITUDE_USUARIO_LOGADO = "LatitudeUsuarioLogado";
     private static final String LONGITUDE_USUARIO_LOGADO = "LongitudeUsuarioLogado";
+    private static final String MOSTRAR_BOTAO_MENSAGEM = "mostrarBotaoMensagem";
 
     private String[] PermissoesNecesssarias = new String[]{
             Manifest.permission.ACCESS_FINE_LOCATION,
@@ -237,6 +238,7 @@ public class PessoasFragment extends Fragment implements Observer {
                 Usuario usuarioClicado = listaDePessoas.get(position);
                 Intent intent = new Intent(getActivity(), PerfilActivity.class);
                 intent.putExtra(USUARIO,usuarioClicado);
+                intent.putExtra(MOSTRAR_BOTAO_MENSAGEM,true);
                 if (usuarioLogado != null && usuarioLogado.getL() != null) {
                     intent.putExtra(LATITUDE_USUARIO_LOGADO, usuarioLogado.getL().get(0));
                     intent.putExtra(LONGITUDE_USUARIO_LOGADO, usuarioLogado.getL().get(1));

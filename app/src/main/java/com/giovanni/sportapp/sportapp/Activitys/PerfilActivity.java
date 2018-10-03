@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.giovanni.sportapp.sportapp.Model.Usuario;
@@ -37,6 +38,9 @@ public class PerfilActivity extends AppCompatActivity {
     private static final String LATITUDE_USUARIO_LOGADO = "LatitudeUsuarioLogado";
     private static final String LONGITUDE_USUARIO_LOGADO = "LongitudeUsuarioLogado";
     private static final String DISTANCIA_INDISPONIVEL = "Distância indisponível";
+    private boolean mostrarBotaoMensagem;
+    private static final String MOSTRAR_BOTAO_MENSAGEM = "mostrarBotaoMensagem";
+    private ImageView ImagemVoltar;
 
     private void RecuperarViews(){
         TextViewNome = findViewById(R.id.textNomeTelaPerfil);
@@ -45,27 +49,35 @@ public class PerfilActivity extends AppCompatActivity {
         ImagemPerfil = findViewById(R.id.imagemTelaPerfil);
         BtnEnviarMensagem = findViewById(R.id.BtnEnviarMensagem);
         TextViewDistanciaPerfil = findViewById(R.id.textDistanciaPerfil);
+        ImagemVoltar = findViewById(R.id.imageViewVoltar);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_perfil);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolBarPrincipal);
-        toolbar.setTitle(PERFIL);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolBarPerfil);
+        toolbar.setTitle("");
         setSupportActionBar(toolbar);
         RecuperarViews();
 
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             UsuarioPerfil = (Usuario) bundle.getSerializable(USUARIO);
+            mostrarBotaoMensagem = (boolean) bundle.getSerializable(MOSTRAR_BOTAO_MENSAGEM);
             LatitudeUsuarioLogado = (double) bundle.getSerializable(LATITUDE_USUARIO_LOGADO);
             LongitudeUsuarioLogado = (double) bundle.getSerializable(LONGITUDE_USUARIO_LOGADO);
             posicaoUsuarioLogado = new LatLng(LatitudeUsuarioLogado,LongitudeUsuarioLogado);
             PreencherDadosUsuarioPerfil();
         }
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ImagemVoltar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
 
         BtnEnviarMensagem.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,6 +87,13 @@ public class PerfilActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        if (mostrarBotaoMensagem) {
+            BtnEnviarMensagem.setVisibility(View.VISIBLE);
+        }else
+        {
+            BtnEnviarMensagem.setVisibility(View.INVISIBLE);
+        }
 
     }
 

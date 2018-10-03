@@ -1,5 +1,6 @@
 package com.giovanni.sportapp.sportapp.Activitys;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -48,6 +49,9 @@ public class MensagemActivity extends AppCompatActivity implements Observer {
     private UsuarioDao            usuarioDao;
     private static final String   USUARIO = "Usuario";
     private static final String   FOMATATO_DATA = "dd/MM/yyyy HH:mm";
+    private static final String   LATITUDE_USUARIO_LOGADO = "LatitudeUsuarioLogado";
+    private static final String   LONGITUDE_USUARIO_LOGADO = "LongitudeUsuarioLogado";
+    private static final String MOSTRAR_BOTAO_MENSAGEM = "mostrarBotaoMensagem";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +70,20 @@ public class MensagemActivity extends AppCompatActivity implements Observer {
         MostrarDadosDoUsuarioDestinatario();
         ConfigurarRecyclerViewMensagens();
         ConfigurarCliqueBotaoEnviarMensagem();
+
+        imagemPerfil.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), PerfilActivity.class);
+                intent.putExtra(USUARIO,usuarioDestinatario);
+                intent.putExtra(MOSTRAR_BOTAO_MENSAGEM,false);
+                if (usuarioLogado != null && usuarioLogado.getL() != null) {
+                    intent.putExtra(LATITUDE_USUARIO_LOGADO, usuarioLogado.getL().get(0));
+                    intent.putExtra(LONGITUDE_USUARIO_LOGADO, usuarioLogado.getL().get(1));
+                }
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
