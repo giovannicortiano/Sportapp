@@ -1,16 +1,9 @@
 package com.giovanni.sportapp.sportapp.Fragments;
 
-
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -23,11 +16,9 @@ import com.giovanni.sportapp.sportapp.Configuracoes.ConfiguradorFireBase;
 import com.giovanni.sportapp.sportapp.Model.Conversa;
 import com.giovanni.sportapp.sportapp.Model.ConversaDao;
 import com.giovanni.sportapp.sportapp.Model.ConversaDaoFirebase;
-import com.giovanni.sportapp.sportapp.Model.Mensagem;
 import com.giovanni.sportapp.sportapp.R;
 import com.giovanni.sportapp.sportapp.Utils.RecyclerItemClickListener;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -38,8 +29,22 @@ public class ConversasFragment extends Fragment implements Observer{
     private ConversasAdapter Adapter;
     private String           IdUsuarioLogado;
     private static final String USUARIO = "Usuario";
+    private ConversaDao conversaDao;
 
     public ConversasFragment() {
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        conversaDao.AdicionarObserver(this);
+        conversaDao.ListarConversasDoUsuario(IdUsuarioLogado);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        conversaDao.RemoverObserver(this);
     }
 
     @Override
@@ -58,9 +63,8 @@ public class ConversasFragment extends Fragment implements Observer{
         RecyclerViewListaConversas.setAdapter(Adapter);
 
         IdUsuarioLogado = ConfiguradorFireBase.getAutenticadorFireBase().getCurrentUser().getUid();
-        ConversaDao conversaDao = new ConversaDaoFirebase(ListaDeConversas);
-        conversaDao.AdicionarObserver(this);
-        conversaDao.ListarConversasDoUsuario(IdUsuarioLogado);
+        conversaDao = new ConversaDaoFirebase(ListaDeConversas);
+
 
         RecyclerViewListaConversas.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), RecyclerViewListaConversas, new RecyclerItemClickListener.OnItemClickListener() {
             @Override
