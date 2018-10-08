@@ -19,4 +19,6 @@ public interface UsuarioDao  {
     void RemoverObserver(Object observer);
 
     String getMsgSucessoSalvarUsuario();
+
+    void AtualizarTokenUsuarioLogado(String token);
 }

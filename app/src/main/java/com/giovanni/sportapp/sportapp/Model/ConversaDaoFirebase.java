@@ -13,6 +13,8 @@ import java.util.Observer;
 public class ConversaDaoFirebase extends Observable implements ConversaDao {
 
     private static final String NO_DE_CONVERSAS = "conversas";
+    private static final String NO_DE_NOTIFICACOES = "notificacoes";
+    private static final String NO_DE_MENSAGEM = "mensagem";
     private ChildEventListener childEventListenerConversas;
     private DatabaseReference conversasRef;
     private ArrayList<Conversa> listaDeConversaInterna;
@@ -80,6 +82,12 @@ public class ConversaDaoFirebase extends Observable implements ConversaDao {
 
         MensagemReferencia = BancoDeDados.child(NO_DE_CONVERSAS);
         MensagemReferencia.child(conversaDestinatario.getIdRemetente()).child(conversaDestinatario.getIdDestinatario()).setValue(conversaDestinatario);
+
+        String idNotificacao = BancoDeDados.child(NO_DE_NOTIFICACOES).push().getKey();
+        BancoDeDados.child(NO_DE_NOTIFICACOES).child(idNotificacao).child(conversaDestinatario
+                .getIdRemetente()).child(conversaDestinatario.getIdDestinatario()).child(NO_DE_MENSAGEM)
+                .setValue(conversaDestinatario.getUltimaMensagem());
+
     }
 
     @Override

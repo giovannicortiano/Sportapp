@@ -20,6 +20,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import java.io.InputStream;
@@ -41,10 +42,13 @@ public class UsuarioDaoFirebase extends Observable implements UsuarioDao {
     private static final String MSG_ERRO_SALVAR_USUARIO = "Falha ao gravar dados do usuário.";
     private static final String MSG_SUCESSO_ATUALIZAR_IMAGEM = "Imagem atualizada com sucesso.";
     private static final String MSG_FALHA_ATUALIZAR_IMAGEM = "Falha ao atualizar imagem do perfil.";
+    private static final String NO_DE_TOKENS = "tokens";
+    private static final String NO_TOKEN_USUARIO = "tokenUsuario";
 
     private Usuario                   usuarioInterno;
     private ArrayList<Usuario>        listaDeUsuariosInterna;
     private DatabaseReference         referenciaFireBaseUsuarios;
+    private DatabaseReference         referenciaFirebaseTokenUsuarios;
     private GeoQueryDataEventListener enventListnerUsuariosPorLocalizacao;
     private GeoQuery                  geoQuery;
     private GeoFire                   geoFire;
@@ -54,6 +58,9 @@ public class UsuarioDaoFirebase extends Observable implements UsuarioDao {
     public UsuarioDaoFirebase(){
         referenciaFireBaseUsuarios = ConfiguradorFireBase.getBancoDeDadosFireBase()
                 .child(NO_DE_USUARIOS);
+
+        referenciaFirebaseTokenUsuarios = ConfiguradorFireBase.getBancoDeDadosFireBase()
+                .child(NO_DE_TOKENS);
 
         geoFire = new GeoFire(referenciaFireBaseUsuarios);
         referenciaStorage = ConfiguradorFireBase.getArmazenadorDeImagensFireBase();
@@ -186,6 +193,9 @@ public class UsuarioDaoFirebase extends Observable implements UsuarioDao {
 
     @Override
     public String RetornarIdUsuarioLogado() {
+        if (ConfiguradorFireBase.getAutenticadorFireBase().getCurrentUser() == null){
+            return null;
+        }
         return ConfiguradorFireBase.getAutenticadorFireBase().getCurrentUser().getUid();
     }
 
@@ -271,6 +281,18 @@ public class UsuarioDaoFirebase extends Observable implements UsuarioDao {
             }
         }
         return -1;
+    }
+
+    public void AtualizarTokenUsuarioLogado(String token){
+        String IdUsuarioLogado = RetornarIdUsuarioLogado();
+        if ((IdUsuarioLogado != null) && (! token.isEmpty())) {
+            referenciaFirebaseTokenUsuarios.child(IdUsuarioLogado).child(NO_TOKEN_USUARIO).setValue(token).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(Exception e) {
+                    e.printStackTrace();
+                }
+            });
+        }
     }
 
 }

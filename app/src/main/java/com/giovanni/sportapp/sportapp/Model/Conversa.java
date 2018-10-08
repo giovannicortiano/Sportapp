@@ -41,4 +41,5 @@ public class Conversa {
     public void setUsuarioExibicao(Usuario usuario) {
         this.usuarioExibicao = usuario;
     }
+    
 }

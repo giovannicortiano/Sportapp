@@ -1,6 +1,11 @@
 package com.giovanni.sportapp.sportapp.Activitys;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -12,7 +17,10 @@ import com.giovanni.sportapp.sportapp.Fragments.ConversasFragment;
 import com.giovanni.sportapp.sportapp.Fragments.PessoasFragment;
 import com.giovanni.sportapp.sportapp.Model.AutenticadorDeUsuario;
 import com.giovanni.sportapp.sportapp.Model.AutenticadorDeUsuarioFirebase;
+import com.giovanni.sportapp.sportapp.Model.UsuarioDao;
+import com.giovanni.sportapp.sportapp.Model.UsuarioDaoFirebase;
 import com.giovanni.sportapp.sportapp.R;
+import com.giovanni.sportapp.sportapp.ServicoNotificacao.ServicoDeMensagemDoFirebase;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItemAdapter;
@@ -24,6 +32,7 @@ public class MainActivity extends AppCompatActivity{
     private AutenticadorDeUsuario autenticadorDeUsuario;
     private MaterialSearchView materialSearchViewPrincipal;
     private FragmentPagerItemAdapter adapter;
+    private UsuarioDao usuarioDao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,8 +45,14 @@ public class MainActivity extends AppCompatActivity{
         ConfigurarViewPager();
         autenticadorDeUsuario = new AutenticadorDeUsuarioFirebase();
 
+        usuarioDao = new UsuarioDaoFirebase();
+        SharedPreferences sharedPreferences =  getSharedPreferences(getResources().getString(R.string.ChaveSharedPreferences),MODE_PRIVATE);
+        String Token = sharedPreferences.getString(getResources().getString(R.string.ChaveToken),"");
+        usuarioDao.AtualizarTokenUsuarioLogado(Token);
+
         materialSearchViewPrincipal = findViewById(R.id.materialSearch_viewPrincipal);
         materialSearchViewPrincipal.setHint("Pesquisar");
+        CriarCanalDeNotificacao();
         materialSearchViewPrincipal.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -96,5 +111,20 @@ public class MainActivity extends AppCompatActivity{
             startActivity(new Intent(MainActivity.this, ConfiguracoesActivity.class));
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void CriarCanalDeNotificacao() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            String IdCanalNotificacao = getResources().getString(R.string.Id_canal_de_notificacao);
+            CharSequence nome = "Sportapp";
+            String descricao = "Notificações do Sportapp";
+            int importancia = NotificationManager.IMPORTANCE_DEFAULT;
+
+            NotificationChannel notificationChannel = new NotificationChannel(IdCanalNotificacao, nome, importancia);
+            notificationChannel.setDescription(descricao);
+
+            NotificationManager notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.createNotificationChannel(notificationChannel);
+        }
     }
 }

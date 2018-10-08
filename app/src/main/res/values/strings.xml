@@ -44,6 +44,10 @@
     <string name="SeusEsportes">Seus Esportes</string>
     <string name="title_activity_conversa">ConversaActivity</string>
     <string name="perfil">Perfil</string>
+    <string name="Id_canal_de_notificacao">SportappNotifications</string>
+    <string name="ChaveSharedPreferences">SportappNotifications</string>
+    <string name="ChaveToken">SportappNotifications</string>
+
 
 
 </resources>

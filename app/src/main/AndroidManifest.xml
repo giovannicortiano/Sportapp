@@ -60,6 +60,19 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.giovanni.sportapp.sportapp.Activitys.MainActivity" />
         </activity>
+
+        <service
+            android:name=".ServicoNotificacao.ServicoDeMensagemDoFirebase">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
+
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="@string/Id_canal_de_notificacao"/>
+
     </application>
 
 </manifest>

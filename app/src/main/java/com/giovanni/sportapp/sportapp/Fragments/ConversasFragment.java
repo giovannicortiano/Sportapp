@@ -37,38 +37,10 @@ public class ConversasFragment extends Fragment implements Observer{
     private ArrayList<Conversa>  ListaDeConversas = new ArrayList<>();
     private ConversasAdapter Adapter;
     private String           IdUsuarioLogado;
-    private static final int ID_NOTIFICACAO = 001;
-    private static final String NOME_NOTIFICATION_CHANNEL = "Sportapp";
     private static final String USUARIO = "Usuario";
 
     public ConversasFragment() {
     }
-
-    public void MostrarNotificacao(String textoNotificacao){
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(getActivity(), NOME_NOTIFICATION_CHANNEL);
-        builder.setSmallIcon(R.drawable.ic_cadeado_cinza_24dp);
-        builder.setContentTitle("Nova mensagem");
-        builder.setContentText(textoNotificacao);
-        builder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
-
-        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(getActivity());
-        notificationManagerCompat.notify(ID_NOTIFICACAO,builder.build());
-    }
-
-    public void CriarCanalDeNotificacao(){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-            CharSequence nome = "Notificação Personalizada";
-            String descricao = "Incluí todas as notificações personalizadas";
-            int importancia = NotificationManager.IMPORTANCE_DEFAULT;
-
-            NotificationChannel notificationChannel = new NotificationChannel(NOME_NOTIFICATION_CHANNEL,nome,importancia);
-            notificationChannel.setDescription(descricao);
-
-            NotificationManager notificationManager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
-            notificationManager.createNotificationChannel(notificationChannel);
-        }
-    }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -109,8 +81,6 @@ public class ConversasFragment extends Fragment implements Observer{
 
             }
         }));
-
-        ///CriarCanalDeNotificacao();
 
         return view;
     }
